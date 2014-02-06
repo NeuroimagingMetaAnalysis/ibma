@@ -39,21 +39,20 @@ classdef ibma_test_stouffers < ibma_test_generic
             myTest.delete_previous_results();
 
             matlabbatch{1}.spm.tools.IBMA.stoufferscfg.dir = {myTest.analysisDir};
-            % Test is computed based on 5 first studies
             matlabbatch{1}.spm.tools.IBMA.stoufferscfg.zimages = cellstr(...
-                spm_select('ExtFPList',myTest.testDataDir, '^zstat_studies\.nii$',1:5));
+                spm_select('ExtFPList',myTest.testDataDir, '^zstat_studies\.nii$',1:21));
             matlabbatch{1}.spm.tools.IBMA.stoufferscfg.rfx.RFX_no = 0;
             
             spm_jobman('run', matlabbatch)
             
             newStatFile = spm_select('FPList', myTest.analysisDir, '^stouffers_ffx_statistic\.nii$');
             newProbaFile = spm_select('FPList', myTest.analysisDir, '^stouffers_ffx_minus_log10_p\.nii$');
-            gtStatFile = spm_select('FPList', fullfile(myTest.groundTruthDir, myTest.testName), '^stouffers_ffx_statistic\.nii$');
+            gtStatFile = spm_select('FPList', fullfile(myTest.groundTruthDir, myTest.testName), '^zstat_ols_z\.nii$');
             gtProbaFile = spm_select('FPList', fullfile(myTest.groundTruthDir, myTest.testName), '^stouffers_ffx_minus_log10_p\.nii$');
             
             newStatData = spm_read_vols(spm_vol(newStatFile));
             gtStatData = spm_read_vols(spm_vol(gtStatFile));
-            myTest.verifyEqual(newStatData, gtStatData, 'AbsTol', 0)
+            myTest.verifyEqual(newStatData, gtStatData, 'AbsTol', 10^-3)
             
             newProbaData = spm_read_vols(spm_vol(newProbaFile));
             gtProbaData = spm_read_vols(spm_vol(gtProbaFile));
