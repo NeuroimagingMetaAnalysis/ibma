@@ -13,14 +13,6 @@ function fisherscfg = ibma_cfg_fishers()
 % Camille Maumet
 
   commoncfg = ibma_config_zbased_stat();
-%    dir         = cfg_files; 
-%   dir.name    = 'Analysis Directory'; 
-%   dir.tag     = 'dir';       
-%   dir.filter  = 'dir';
-%   dir.ufilter = '.*';
-%   dir.num     = [1 1];     
-%   dir.help    = {'','This sets the SnPM anlaysis directory.','All results will appear in this directory.'}; 
-
   
   fisherscfg = cfg_exbranch;
   fisherscfg.tag     = 'fisher';

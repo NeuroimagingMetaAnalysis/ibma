@@ -18,7 +18,7 @@ function commoncfg = ibma_config_zbased_stat()
   dir.filter  = 'dir';
   dir.ufilter = '.*';
   dir.num     = [1 1];     
-  dir.help    = {'','This sets the SnPM anlaysis directory.','All results will appear in this directory.'}; 
+  dir.help    = {'','This sets the IBMA anlaysis directory.','All results will appear in this directory.'}; 
 
   scans         = cfg_files;
   scans.tag     = 'zimages';
