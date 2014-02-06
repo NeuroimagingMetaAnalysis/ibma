@@ -13,5 +13,5 @@ function ibma_run_stouffers(job)
 % Id: ibma_run_stouffers.m  IBMA toolbox
 % Camille Maumet
 
-  ibma_stouffers(job.zimages, job.dir{1}, isfield(job.rfx, 'RFX_yes'))
+	ibma_stouffers(job.zimages, job.dir{1}, isfield(job.rfx, 'RFX_yes'))
 end

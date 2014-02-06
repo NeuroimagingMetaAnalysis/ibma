@@ -12,32 +12,32 @@ function ibma_fishers(zFiles, outDir)
 % Id: ibma_fishers.m  IBMA toolbox
 % Camille Maumet
 
-  nStudies = numel(zFiles); % number of studies  
-  disp(['Computing Fisher''s meta-analysis on ' num2str(nStudies) ' studies.'])
-  
-  statFile = fullfile(outDir, 'fishers_ffx_statistic.nii');
-  rfxffx = 'ffx';
+    nStudies = numel(zFiles); % number of studies  
+    disp(['Computing Fisher''s meta-analysis on ' num2str(nStudies) ' studies.'])
 
-  % Get the statistic
-%     P_i = normcdf(-z_i)
-%     stat = -2 sum( log10(P_i) )
-  matlabbatch{1}.spm.util.imcalc.input = zFiles;
-  matlabbatch{1}.spm.util.imcalc.output = statFile;
-  matlabbatch{1}.spm.util.imcalc.outdir = {outDir};
-  matlabbatch{1}.spm.util.imcalc.expression = '-2*sum( log(normcdf(-X)) )';
-  matlabbatch{1}.spm.util.imcalc.options.dmtx = 1;
-  matlabbatch{1}.spm.util.imcalc.options.dtype = 16;
+    statFile = fullfile(outDir, 'fishers_ffx_statistic.nii');
+    rfxffx = 'ffx';
 
-  spm_jobman('run', matlabbatch);
-  clear matlabbatch;
-  
-  % Get the probability
-  matlabbatch{1}.spm.util.imcalc.input = {statFile};
-  matlabbatch{1}.spm.util.imcalc.output = ['fishers_' rfxffx '_minus_log10_p.nii'];
-  matlabbatch{1}.spm.util.imcalc.outdir = {outDir};
-  matlabbatch{1}.spm.util.imcalc.expression = ['-log10(1-cdf(''chi2'',i1, 2*' num2str(nStudies) '))'];
-  matlabbatch{1}.spm.util.imcalc.options.dmtx = 0;
-  matlabbatch{1}.spm.util.imcalc.options.dtype = 64;
+    % Get the statistic
+    %     P_i = normcdf(-z_i)
+    %     stat = -2 sum( log10(P_i) )
+    matlabbatch{1}.spm.util.imcalc.input = zFiles;
+    matlabbatch{1}.spm.util.imcalc.output = statFile;
+    matlabbatch{1}.spm.util.imcalc.outdir = {outDir};
+    matlabbatch{1}.spm.util.imcalc.expression = '-2*sum( log(normcdf(-X)) )';
+    matlabbatch{1}.spm.util.imcalc.options.dmtx = 1;
+    matlabbatch{1}.spm.util.imcalc.options.dtype = 16;
 
-  spm_jobman('run', matlabbatch);
+    spm_jobman('run', matlabbatch);
+    clear matlabbatch;
+
+    % Get the probability
+    matlabbatch{1}.spm.util.imcalc.input = {statFile};
+    matlabbatch{1}.spm.util.imcalc.output = ['fishers_' rfxffx '_minus_log10_p.nii'];
+    matlabbatch{1}.spm.util.imcalc.outdir = {outDir};
+    matlabbatch{1}.spm.util.imcalc.expression = ['-log10(1-cdf(''chi2'',i1, 2*' num2str(nStudies) '))'];
+    matlabbatch{1}.spm.util.imcalc.options.dmtx = 0;
+    matlabbatch{1}.spm.util.imcalc.options.dtype = 64;
+
+    spm_jobman('run', matlabbatch);
 end
