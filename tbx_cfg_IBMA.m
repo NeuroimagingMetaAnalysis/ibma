@@ -18,11 +18,12 @@ function ibma = tbx_cfg_ibma()
   
   % IBMA Tools
   ibma         = cfg_choice;
-  ibma.tag     = 'IBMA';
+  ibma.tag     = 'ibma';
   ibma.name    = 'Image-Based Meta-Analysis Tools';
   ibma.help    = {
                     'Image-Based NeuroImaging Meta-Analysis.'
   }';
-  ibma.values  = {ibma_cfg_stouffers ibma_cfg_fishers ibma_cfg_weighted_z};
+  ibma.values  = {ibma_cfg_fishers ibma_cfg_stouffers ibma_cfg_weighted_z...
+      ibma_cfg_mega_ffx};
   
 end
