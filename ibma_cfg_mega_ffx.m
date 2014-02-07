@@ -16,13 +16,7 @@ function megaffx = ibma_cfg_mega_ffx()
     
     nSubjects = ibma_config_nsubjects();
 
-    conFiles         = cfg_files;
-    conFiles.tag     = 'confiles';
-    conFiles.name    = 'Contrast images';
-    conFiles.help    = {'Select the contrast images.'};
-    conFiles.filter = 'image';
-    conFiles.ufilter = '.*';
-    conFiles.num     = [1 Inf];  
+    conFiles = ibma_config_contrast_files();
     
     varConfiles         = cfg_files;
     varConfiles.tag     = 'varconfiles';
