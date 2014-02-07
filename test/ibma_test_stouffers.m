@@ -38,10 +38,10 @@ classdef ibma_test_stouffers < ibma_test_generic
             
             myTest.delete_previous_results();
 
-            matlabbatch{1}.spm.tools.IBMA.stoufferscfg.dir = {myTest.analysisDir};
-            matlabbatch{1}.spm.tools.IBMA.stoufferscfg.zimages = cellstr(...
+            matlabbatch{1}.spm.tools.ibma.stoufferscfg.dir = {myTest.analysisDir};
+            matlabbatch{1}.spm.tools.ibma.stoufferscfg.zimages = cellstr(...
                 spm_select('ExtFPList',myTest.testDataDir, '^zstat_studies\.nii$',1:21));
-            matlabbatch{1}.spm.tools.IBMA.stoufferscfg.rfx.RFX_no = 0;
+            matlabbatch{1}.spm.tools.ibma.stoufferscfg.rfx.RFX_no = 0;
             
             spm_jobman('run', matlabbatch)
             
@@ -66,12 +66,12 @@ classdef ibma_test_stouffers < ibma_test_generic
             
             myTest.delete_previous_results();
                         
-            matlabbatch{1}.spm.tools.IBMA.stoufferscfg.dir = {...
+            matlabbatch{1}.spm.tools.ibma.stoufferscfg.dir = {...
                 fullfile(myTest.testDataDir, 'current', myTest.testName)};
             % Test is computed based on 5 first studies
-            matlabbatch{1}.spm.tools.IBMA.stoufferscfg.zimages = cellstr(...
+            matlabbatch{1}.spm.tools.ibma.stoufferscfg.zimages = cellstr(...
                 spm_select('ExtFPList',myTest.testDataDir,'^zstat_studies\.nii$',1:5));
-            matlabbatch{1}.spm.tools.IBMA.stoufferscfg.rfx.RFX_yes = 1;
+            matlabbatch{1}.spm.tools.ibma.stoufferscfg.rfx.RFX_yes = 1;
             
             spm_jobman('run', matlabbatch)
             

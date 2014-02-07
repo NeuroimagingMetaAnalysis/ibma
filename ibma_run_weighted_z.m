@@ -12,5 +12,5 @@ function ibma_run_weighted_z(job)
 % Id: ibma_run_weighted_z.m  IBMA toolbox
 % Camille Maumet
 
-    ibma_weighted_z(job.zimages, job.dir{1}, job.nSubjects)
+    ibma_weighted_z(job.zimages, job.dir{1}, job.nsubjects)
 end

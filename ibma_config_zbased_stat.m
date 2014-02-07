@@ -12,14 +12,8 @@ function commoncfg = ibma_config_zbased_stat()
 % Id: ibma_config_zbased_stat.m  IBMA toolbox
 % Camille Maumet
 
-  dir         = cfg_files; 
-  dir.name    = 'Analysis Directory'; 
-  dir.tag     = 'dir';       
-  dir.filter  = 'dir';
-  dir.ufilter = '.*';
-  dir.num     = [1 1];     
-  dir.help    = {'','This sets the IBMA anlaysis directory.','All results will appear in this directory.'}; 
-
+  dir = ibma_config_analysis_dir();
+  
   scans         = cfg_files;
   scans.tag     = 'zimages';
   scans.name    = 'Z images';

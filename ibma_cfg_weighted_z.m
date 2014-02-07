@@ -14,12 +14,7 @@ function weightedZcfg = ibma_cfg_weighted_z()
 
     commoncfg = ibma_config_zbased_stat();
   
-    nSubjects         = cfg_entry;
-    nSubjects.tag     = 'nSubjects';
-    nSubjects.name    = 'Number of subjects per studies';
-    nSubjects.help    = {'Number of subjects per studies'};
-    nSubjects.strtype = 'e';
-    nSubjects.num     = [Inf 1];
+    nSubjects = ibma_config_nsubjects();
   
     weightedZcfg = cfg_exbranch;
     weightedZcfg.tag     = 'weightedz';
@@ -33,10 +28,10 @@ end
 function t = ibma_check_weighted_z(job)
     t={};
     % nSubjects must have exactly one value per study
-    numValues = numel(job.nSubjects);
-    numStudies = numel(job.zimages);
-    if numValues ~= numStudies
+    nValues = numel(job.nsubjects);
+    nStudies = numel(job.zimages);
+    if nValues ~= nStudies
         t = {['Wrong number of values for number of subjects: ' ...
-            num2str(numValues) ' values for ' num2str(numStudies) ' studies.' ] };
+            num2str(nValues) ' values for ' num2str(nStudies) ' studies.' ] };
     end
 end
