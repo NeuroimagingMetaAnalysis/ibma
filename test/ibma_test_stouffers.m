@@ -78,7 +78,7 @@ classdef ibma_test_stouffers < ibma_test_generic
             newStatFile = spm_select('FPList', myTest.analysisDir, '^spmT_0001\.img$');
             newProbaFile = spm_select('FPList', myTest.analysisDir, '^stouffers_rfx_minus_log10_p\.nii$');
             gtStatFile = spm_select('FPList', fullfile(myTest.groundTruthDir, myTest.testName), '^spmT_0001\.img$');
-            gtProbaFile = spm_select('FPList', fullfile(myTest.groundTruthDir, myTest.testName), '^stouffers_isRFX_minus_log10_p\.nii$');
+            gtProbaFile = spm_select('FPList', fullfile(myTest.groundTruthDir, myTest.testName), '^stouffers_rfx_minus_log10_p\.nii$');
             
             newStatData = spm_read_vols(spm_vol(newStatFile));
             gtStatData = spm_read_vols(spm_vol(gtStatFile));

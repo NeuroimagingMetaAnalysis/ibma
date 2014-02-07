@@ -37,6 +37,9 @@ function ibma_stouffers(zFiles, outDir, isRFX)
         matlabbatch{1}.spm.util.imcalc.options.dtype = 16;
 
         spm_jobman('run', matlabbatch);
+        
+        probaExpression = 'normcdf(-i1, 0, 1)';
+
     else
         %     statFile = fullfile(outDir, 'stouffers_rfx_statistic.nii');
         rfxffx = 'rfx';
@@ -54,14 +57,15 @@ function ibma_stouffers(zFiles, outDir, isRFX)
         spm_jobman('run', matlabbatch);
 
         statFile = spm_select('FPList', outDir, '^spmT_0001\.img$');
+        dof = nStudies - 1;
+        probaExpression = ['cdf(''T'', -i1, ' num2str(dof) ')'];
     end
     clear matlabbatch;
-
-    % Get the probability
+    
     matlabbatch{1}.spm.util.imcalc.input = {statFile};
     matlabbatch{1}.spm.util.imcalc.output = ['stouffers_' rfxffx '_minus_log10_p.nii'];
     matlabbatch{1}.spm.util.imcalc.outdir = {outDir};
-    matlabbatch{1}.spm.util.imcalc.expression = '-log10(normcdf(-i1, 0, 1))';
+    matlabbatch{1}.spm.util.imcalc.expression = ['-log10(' probaExpression ')'];
     matlabbatch{1}.spm.util.imcalc.options.dmtx = 0;
     matlabbatch{1}.spm.util.imcalc.options.dtype = 64;
 
