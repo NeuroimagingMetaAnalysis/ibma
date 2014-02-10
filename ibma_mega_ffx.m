@@ -14,6 +14,14 @@ function ibma_mega_ffx(outDir, contrastFiles, varContrastFiles, nSubjects)
 % Id: ibma_mega_ffx.m  IBMA toolbox
 % Camille Maumet
 
+    % Very important to avoid confusion between contrast and variance maps
+    if size(contrastFiles, 2) > 1
+        contrastFiles = contrastFiles';
+    end
+    if size(varContrastFiles, 2) > 1
+        varContrastFiles = varContrastFiles';
+    end
+
     nStudies = numel(contrastFiles); % number of studies  
     disp(['Computing mega-analysis (with third-level FFX) on ' num2str(nStudies) ' studies.'])
 
