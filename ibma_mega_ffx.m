@@ -52,7 +52,7 @@ function ibma_mega_ffx(outDir, contrastFiles, varContrastFiles, nSubjects)
     spm_jobman('run', matlabbatch);
     clear matlabbatch;
     
-    dof = sum(nSubjects)-1;
+    dof = sum(nSubjects-1)-1;
 
     % Get the probability
     matlabbatch{1}.spm.util.imcalc.input = {statFile};
