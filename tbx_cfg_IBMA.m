@@ -23,7 +23,7 @@ function ibma = tbx_cfg_ibma()
   ibma.help    = {
                     'Image-Based NeuroImaging Meta-Analysis.'
   }';
-  ibma.values  = {ibma_cfg_fishers ibma_cfg_stouffers ibma_cfg_weighted_z...
-      ibma_cfg_mega_mfx_ols ibma_cfg_mega_ffx};
+  ibma.values  = {ibma_config_fishers ibma_config_stouffers ibma_config_weighted_z...
+      ibma_config_mega_mfx_ols ibma_config_mega_ffx};
   
 end

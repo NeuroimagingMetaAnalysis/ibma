@@ -1,7 +1,7 @@
-function fisherscfg = ibma_cfg_fishers()
-% IBMA_CFG_FISHERS Define the matlabbatch job structure for Fisher's 
+function fisherscfg = ibma_config_fishers()
+% IBMA_CONFIG_FISHERS Define the matlabbatch job structure for Fisher's 
 % meta-analysis.
-%   fisherscfg = IBMA_CFG_FISHERS() return the matlabbatch configuration
+%   fisherscfg = IBMA_CONFIG_FISHERS() return the matlabbatch configuration
 %   to run Fisher's meta-analysis.
 %
 %   See also IBMA_FISHERS, IBMA_CFG_STOUFFERS.
@@ -9,7 +9,7 @@ function fisherscfg = ibma_cfg_fishers()
 %   fisherscfg = ibma_cfg_fishers()
 
 % Copyright (C) 2014 The University of Warwick
-% Id: ibma_run_fishers.m  IBMA toolbox
+% Id: ibma_config_fishers.m  IBMA toolbox
 % Camille Maumet
 
   commoncfg = ibma_config_zbased_stat();

@@ -1,15 +1,15 @@
-function megaffx = ibma_cfg_mega_ffx()
-% IBMA_CFG_MEGA_FFX  Define the matlabbatch job structure for third-level 
+function megaffx = ibma_config_mega_ffx()
+% IBMA_CONFIG_MEGA_FFX  Define the matlabbatch job structure for third-level 
 % of a hierarachical GLM using FFX (at the third-level only).
-%   megaffx = IBMA_CFG_MEGA_FFX() return the matlabbatch configuration
+%   megaffx = IBMA_CONFIG_MEGA_FFX() return the matlabbatch configuration
 %   to run Fisher's meta-analysis.
 %
-%   See also IBMA_CFG_FISHERS, IBMA_CFG_STOUFFERS, IBMA_CFG_WEIGHTED_Z.
+%   See also IBMA_CONFIG_FISHERS, IBMA_CONFIG_STOUFFERS, IBMA_CONFIG_WEIGHTED_Z.
 %
-%   tmegaffx = ibma_cfg_mega_ffx()
+%   tmegaffx = ibma_config_mega_ffx()
 
 % Copyright (C) 2014 The University of Warwick
-% Id: ibma_cfg_mega_ffx.m  IBMA toolbox
+% Id: ibma_config_mega_ffx.m  IBMA toolbox
 % Camille Maumet
 
     dir = ibma_config_analysis_dir();
