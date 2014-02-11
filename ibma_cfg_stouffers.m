@@ -15,23 +15,7 @@ function stoufferscfg = ibma_cfg_stouffers()
 
     commoncfg = ibma_config_zbased_stat();
   
-    RFX_no      = cfg_const;
-    RFX_no.tag  = 'RFX_no';
-    RFX_no.name = 'FFX';
-    RFX_no.val  = {0};
-    RFX_no.help = {'Fixed-effects.'};
-
-    RFX_yes      = cfg_const;
-    RFX_yes.tag  = 'RFX_yes';
-    RFX_yes.name = 'RFX';
-    RFX_yes.val  = {0};
-    RFX_yes.help = {'Ramdom-effects.'};
-
-    ffxrfx         = cfg_choice;
-    ffxrfx.name    = 'Random effects?';
-    ffxrfx.tag     = 'rfx';
-    ffxrfx.values  = {RFX_yes; RFX_no};
-    ffxrfx.val     = {RFX_no};
+    ffxrfx = ibma_config_ffxrfx();
 
     stoufferscfg = cfg_exbranch;
     stoufferscfg.tag     = 'stoufferscfg';
