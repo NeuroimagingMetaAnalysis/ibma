@@ -19,9 +19,9 @@ function megaffxolscfg = ibma_cfg_mega_ffx_ols()
     conFiles = ibma_config_contrast_files();
      
     megaffxolscfg = cfg_exbranch;
-    megaffxolscfg.tag     = 'megaffxols';
-    megaffxolscfg.name    = 'Third-level FFX OLS';
+    megaffxolscfg.tag     = 'megamfxols';
+    megaffxolscfg.name    = 'Third-level MFX with OLS';
     megaffxolscfg.val     = {dir conFiles};
-    megaffxolscfg.help    = {'Third-level of a hierarachical GLM using FFX (at the third-level only).'};
-    megaffxolscfg.prog = @ibma_run_mega_ffx_ols;
+    megaffxolscfg.help    = {'Third-level of a hierarachical MFX GLM using OLS.'};
+    megaffxolscfg.prog = @ibma_run_mega_mfx_ols;
 end

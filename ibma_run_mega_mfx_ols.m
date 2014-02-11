@@ -14,5 +14,5 @@ function ibma_run_mega_ffx_ols(job)
 % Id: ibma_run_mega_ffx_ols.m  IBMA toolbox
 % Camille Maumet
 
-	ibma_mega_ffx_ols(job.dir{1}, job.confiles)
+	ibma_mega_mfx_ols(job.dir{1}, job.confiles)
 end
