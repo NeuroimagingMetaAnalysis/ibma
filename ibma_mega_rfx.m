@@ -1,20 +1,20 @@
-function ibma_mega_mfx_ols(outDir, conFiles)
-% IBMA_STOUFFERS Run third-level of a hierarachical GLM using MFX 
+function ibma_mega_rfx(outDir, conFiles)
+% IBMA_MEGA_RFX Run third-level of a hierarachical GLM using MFX 
 % and Ordinary Least-Squares (OLS).
-%   IBMA_MEGA_MFX_OLS(OUTDIR, CONTRASTFILES) perform the third-level of a 
+%   IBMA_MEGA_RFX(OUTDIR, CONTRASTFILES) perform the third-level of a 
 %   hierarachical GLM using MFX on contrast estimate CONFILES and store the 
 %   results in OUTDIR. 
 %
 %   See also IBMA_FISHERS.
 %
-%   ibma_mega_mfx_ols(outDir, conFiles)
+%   ibma_mega_rfx(outDir, conFiles)
 
 % Copyright (C) 2014 The University of Warwick
-% Id: ibma_mega_mfx_ols.m  IBMA toolbox
+% Id: ibma_mega_rfx.m  IBMA toolbox
 % Camille Maumet
 
     nStudies = numel(conFiles); % number of studies  
-    disp(['Computing MFX OLS mega-analysis on ' num2str(nStudies) ' studies.'])
+    disp(['Computing RFX mega-analysis on ' num2str(nStudies) ' studies.'])
 
     if ~exist(outDir, 'dir')
         mkdir(outDir);
@@ -40,7 +40,7 @@ function ibma_mega_mfx_ols(outDir, conFiles)
     clear matlabbatch;
     
     matlabbatch{1}.spm.util.imcalc.input = {statFile};
-    matlabbatch{1}.spm.util.imcalc.output = 'mega_mfx_ols_minus_log10_p.nii';
+    matlabbatch{1}.spm.util.imcalc.output = 'mega_rfx_minus_log10_p.nii';
     matlabbatch{1}.spm.util.imcalc.outdir = {outDir};
     matlabbatch{1}.spm.util.imcalc.expression = ['-log10(cdf(''T'',-i1, ' num2str(dof) '))'];
     matlabbatch{1}.spm.util.imcalc.options.dmtx = 0;

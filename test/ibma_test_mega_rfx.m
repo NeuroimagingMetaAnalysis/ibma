@@ -1,21 +1,21 @@
-classdef ibma_test_mega_mfx_ols < ibma_test_generic
-% IBMA_TEST_MEGA_MFX_OLS    Perform non-regression tests third-level 
+classdef ibma_test_mega_rfx < ibma_test_generic
+% IBMA_TEST_MEGA_RFX    Perform non-regression tests third-level 
 % of a hierarachical GLM using FFX (at the third-level only) and OLS.
 %   Check that results obtained using the current version of the software 
 %   are identical to the results computed with an earlier version.
 %
 %   Usage:
 %   Run all tests
-%   tests=ibma_test_mega_mfx_ols;res=run(tests)
+%   tests=ibma_test_mega_rfx;res=run(tests)
 %   Run a specific test
-%   tests=ibma_test_mega_mfx_ols;res=run(tests, 'test_mega_mfx_ols_1')
+%   tests=ibma_test_mega_rfx;res=run(tests, 'test_mega_rfx_1')
 % 
 %   See also IBMA_TEST_STOUFFERS.
 %
-%   ibma_test_mega_mfx_ols()
+%   ibma_test_mega_rfx()
 
 % Copyright (C) 2014 The University of Warwick
-% Id: ibma_test_mega_mfx_ols.m  IBMA toolbox
+% Id: ibma_test_mega_rfx.m  IBMA toolbox
 % Camille Maumet
 
     properties
@@ -28,8 +28,8 @@ classdef ibma_test_mega_mfx_ols < ibma_test_generic
 
     methods (Test)
         % Nominal test
-        function test_mega_mfx_ols_1(myTest)          
-            myTest.testName = 'mega_mfx_ols_1';
+        function test_mega_rfx_1(myTest)          
+            myTest.testName = 'mega_rfx_1';
             myTest.analysisDir = fullfile(myTest.currentDir, myTest.testName);
             if ~exist(myTest.analysisDir, 'dir')
                 mkdir(myTest.analysisDir);
@@ -37,14 +37,14 @@ classdef ibma_test_mega_mfx_ols < ibma_test_generic
             
             myTest.delete_previous_results();
 
-            matlabbatch{1}.spm.tools.ibma.megamfxols.dir = {myTest.analysisDir};
-            matlabbatch{1}.spm.tools.ibma.megamfxols.confiles = cellstr(...
+            matlabbatch{1}.spm.tools.ibma.megarfx.dir = {myTest.analysisDir};
+            matlabbatch{1}.spm.tools.ibma.megarfx.confiles = cellstr(...
                 spm_select('ExtFPList',myTest.testDataDir, '^conFiles\.nii$', 1:1000));
             
             spm_jobman('run', matlabbatch)
             
             newStatFile = spm_select('FPList', myTest.analysisDir, '^spmT_0001\.img$');
-            newProbaFile = spm_select('FPList', myTest.analysisDir, '^mega_mfx_ols_minus_log10_p\.nii$');
+            newProbaFile = spm_select('FPList', myTest.analysisDir, '^mega_rfx_minus_log10_p\.nii$');
             gtStatFile = spm_select('FPList', fullfile(myTest.groundTruthDir, myTest.testName), '^spmT_0001\.img$');
             gtProbaFile = spm_select('FPList', fullfile(myTest.groundTruthDir, myTest.testName), '^mega_ffx_ols_ffx_minus_log10_p\.nii$');
             
