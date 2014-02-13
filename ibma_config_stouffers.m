@@ -18,11 +18,12 @@ function stouffersconfig = ibma_config_stouffers()
     ffxrfx = ibma_config_ffxrfx();
 
     stouffersconfig = cfg_exbranch;
-    stouffersconfig.tag     = 'stouffersconfig';
+    stouffersconfig.tag     = 'stouffers';
     stouffersconfig.name    = 'Stouffer''s';
     stouffersconfig.val     = {commonconfig{:} ffxrfx};
     stouffersconfig.help    = {'Stouffer''s.'};
     stouffersconfig.prog = @ibma_run_stouffers;
     % TODO
     % stouffersconfig.vout = @todo;
+endo;
 end
