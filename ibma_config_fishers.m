@@ -15,7 +15,7 @@ function fisherscfg = ibma_config_fishers()
   commoncfg = ibma_config_zbased_stat();
   
   fisherscfg = cfg_exbranch;
-  fisherscfg.tag     = 'fisher';
+  fisherscfg.tag     = 'fishers';
   fisherscfg.name    = 'Fisher''s';
   fisherscfg.val     = commoncfg;
   fisherscfg.help    = {'Fisher''s.'};

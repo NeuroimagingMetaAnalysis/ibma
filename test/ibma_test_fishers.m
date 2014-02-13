@@ -37,9 +37,9 @@ classdef ibma_test_fishers < ibma_test_generic
             
             myTest.delete_previous_results();
 
-            matlabbatch{1}.spm.tools.ibma.fisher.dir = {myTest.analysisDir};
+            matlabbatch{1}.spm.tools.ibma.fishers.dir = {myTest.analysisDir};
             % Test is computed based on 5 first studies
-            matlabbatch{1}.spm.tools.ibma.fisher.zimages = cellstr(...
+            matlabbatch{1}.spm.tools.ibma.fishers.zimages = cellstr(...
                 spm_select('ExtFPList',myTest.testDataDir, '^zstat_studies\.nii$',1:5));
             
             spm_jobman('run', matlabbatch)
