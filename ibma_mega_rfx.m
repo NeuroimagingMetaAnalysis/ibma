@@ -25,7 +25,7 @@ function ibma_mega_rfx(outDir, conFiles)
 
     % Compute a one-sample t-test on conFiless
     matlabbatch{1}.spm.stats.factorial_design.dir = {outDir};
-    matlabbatch{1}.spm.stats.factorial_design.des.t1.scans = conFiles;
+    matlabbatch{1}.spm.stats.factorial_design.des.t1.scans = cellstr(strvcat(conFiles));
 
     matlabbatch{2}.spm.stats.fmri_est.spmmat = {fullfile(outDir, 'SPM.mat')};
 
@@ -35,7 +35,7 @@ function ibma_mega_rfx(outDir, conFiles)
 
     spm_jobman('run', matlabbatch);
 
-    statFile = spm_select('FPList', outDir, '^spmT_0001\.img$');
+    statFile = spm_select('FPList', outDir, '^spmT_0001\.(img|nii)$');
 
     clear matlabbatch;
     
