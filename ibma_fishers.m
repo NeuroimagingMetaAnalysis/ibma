@@ -35,7 +35,7 @@ function ibma_fishers(zFiles, outDir)
     matlabbatch{1}.spm.util.imcalc.input = {statFile};
     matlabbatch{1}.spm.util.imcalc.output = ['fishers_' rfxffx '_minus_log10_p.nii'];
     matlabbatch{1}.spm.util.imcalc.outdir = {outDir};
-    matlabbatch{1}.spm.util.imcalc.expression = ['-log10(1-cdf(''chi2'',i1, 2*' num2str(nStudies) '))'];
+    matlabbatch{1}.spm.util.imcalc.expression = ['-log10(cdf(''chi2'',i1, 2*' num2str(nStudies) ', ''upper''))'];
     matlabbatch{1}.spm.util.imcalc.options.dmtx = 0;
     matlabbatch{1}.spm.util.imcalc.options.dtype = 64;
 
