@@ -1,4 +1,4 @@
-function nSubjects = ibma_config_nsubjects()
+function nSubjects = ibma_config_nsubjects(sameForAllStudies)
 % IBMA_CONFIG_NSUBJECTS  Define the matlabbatch job structure for
 % selection of the number of subjects per studies.
 %   nSubjects = IBMA_CONFIG_NSUBJECTS() return the matlabbatch 
@@ -10,12 +10,24 @@ function nSubjects = ibma_config_nsubjects()
 % Id: ibma_config_nsubjects.m  IBMA toolbox
 % Camille Maumet
 
+    if nargin < 1
+        sameForAllStudies = false;
+    end
+
+    if sameForAllStudies
+        num = [1 1];        
+    else
+        num = [Inf 1];
+    end
+    
+    name = 'Number of subjects per studies';
+    
     nSubjects         = cfg_entry;
     nSubjects.tag     = 'nsubjects';
-    nSubjects.name    = 'Number of subjects per studies';
-    nSubjects.help    = {'Number of subjects per studies'};
+    nSubjects.name    = name;
+    nSubjects.help    = {[name '.']};
     nSubjects.strtype = 'e';
-    nSubjects.num     = [Inf 1];
+    nSubjects.num     = num;
 end
 
     

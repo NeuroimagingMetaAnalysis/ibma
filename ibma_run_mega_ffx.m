@@ -10,5 +10,24 @@ function ibma_run_mega_ffx(job)
 % Id: ibma_mega_ffx.m  IBMA toolbox
 % Camille Maumet
 
-    ibma_mega_ffx(job.dir{1}, job.confiles, job.varconfiles, job.nsubjects)
+    equalFields = {'variances', 'samplesize'};
+    
+    for f = 1:numel(equalFields)
+        if isfield(job.(equalFields{f}), 'equal')
+            equal.(equalFields{f}) = true;
+        elseif isfield(job.(equalFields{f}), 'unequal')
+            equal.(equalFields{f}) = false;
+        else
+            error(['Unexpected value for job.' equalFields{f}])
+        end
+    end
+    
+    if isfield(job.samplesize, 'equal')
+        nSubjects = job.samplesize.equal.nsubjects;
+    else
+        nSubjects = job.samplesize.unequal.nsubjects;
+    end
+
+    ibma_mega_ffx(job.dir{1}, job.confiles, job.varconfiles, ...
+        equal.samplesize, equal.variances, nSubjects)
 end
