@@ -14,5 +14,5 @@ function ibma_run_mega_rfx(job)
 % Id: ibma_run_mega_rfx.m  IBMA toolbox
 % Camille Maumet
 
-	ibma_mega_rfx(job.dir{1}, job.confiles)
+	ibma_mega_rfx(job.dir{1}, job.model)
 end
