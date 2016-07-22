@@ -46,6 +46,10 @@ function ibma_stouffers(zFiles, outDir, isRFX)
 
         % Compute a one-sample t-test on z
         matlabbatch{1}.spm.stats.factorial_design.dir = {outDir};
+        if size(zFiles, 1)==1
+            zFiles = zFiles';
+        end
+        
         matlabbatch{1}.spm.stats.factorial_design.des.t1.scans = zFiles;
 
         matlabbatch{2}.spm.stats.fmri_est.spmmat = {fullfile(outDir, 'SPM.mat')};
@@ -56,7 +60,7 @@ function ibma_stouffers(zFiles, outDir, isRFX)
 
         spm_jobman('run', matlabbatch);
 
-        statFile = spm_select('FPList', outDir, '^spmT_0001\.img$');
+        statFile = spm_select('FPList', outDir, '^spmT_0001\.(img|nii)$');
         dof = nStudies - 1;
         probaExpression = ['cdf(''T'', -i1, ' num2str(dof) ')'];
     end

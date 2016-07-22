@@ -1,4 +1,5 @@
-function ibma_mega_ffx(outDir, contrastFiles, varContrastFiles, nSubjects)
+function ibma_mega_ffx(outDir, contrastFiles, varContrastFiles, ...
+    sampleSizesEqual, variancesEqual, nSubjects)
 % IBMA_MEGA_FFX Run third-level of a hierarachical GLM using FFX 
 % (at the third-level only).
 %   IBMA_MEGA_FFX(OUTDIR, CONTRASTFILES, VARCONTRASTFILES) perform 
@@ -27,32 +28,96 @@ function ibma_mega_ffx(outDir, contrastFiles, varContrastFiles, nSubjects)
 
     statFile = fullfile(outDir, 'mega_ffx_statistic.nii');
     rfxffx = 'ffx';
+    
+    % Number of studies        
+    kExpr = num2str(nStudies);
+    
+    if variancesEqual
+        if sampleSizesEqual
+            contrastSumExpr = '';
+            estimatedSigmaSquaredExpr = '';
 
-    % Get the statistic
-    %   mega-analysis (FFX)
-    %   hat_beta_wls = 1 / sum ( 1/ sigma^2_i ) sum ( cope_i / sigma^2_i )
-    %   Cov(hat_beta_ls) = 1 / sum ( 1/ sigma^2_i )
-    %   stat_wls = 1 / sqrt( sum ( 1/ sigma^2_i ) ) sum ( cope_i / sigma^2_i )
-    exprSumVar = 'sqrt(1./(';
-    exprSumCopeVar = '(';
-    for i = 1:nStudies
-        exprSumVar = [exprSumVar '1./i' num2str(i+nStudies) '+'];
-        exprSumCopeVar = [exprSumCopeVar 'i' num2str(i) './i' num2str(i+nStudies) '+'];
+            % Number of subjects in each study
+            nExpr = num2str(nSubjects);
+
+            for i = 1:nStudies
+                conIdx = i;
+                varIdx = i+nStudies;
+                contrastSumExpr = [ contrastSumExpr 'i' num2str(conIdx) '+'];
+                estimatedSigmaSquaredExpr = [estimatedSigmaSquaredExpr 'i' num2str(varIdx) '+'];
+            end
+
+            % Remove trailing '+'   
+            estimatedSigmaSquaredExpr(end) = '';
+            contrastSumExpr(end) = '';
+            
+            contrastSumExpr = ['(' contrastSumExpr ')'];
+            
+            % This is only needed because the variance estimate have already been divided by sample size;            
+%             estimatedSigmaSquaredExpr = ['(' estimatedSigmaSquaredExpr ').*' nExpr];
+
+            % Multiply by 1/k          
+            estimatedSigmaSquaredExpr = ['1/' kExpr '.*(' estimatedSigmaSquaredExpr ')'];
+
+            expr = ['1/sqrt(' kExpr ').*' contrastSumExpr './sqrt(' estimatedSigmaSquaredExpr './' nExpr ')'];
+
+            % Degrees of freedom            
+            dof = nStudies*(nSubjects-1);
+        else           
+            WeightedContrastSumExpr = '';
+            estimatedSigmaSquaredExpr = '';
+            for i = 1:nStudies
+                conIdx = i;
+                varIdx = i+nStudies;
+                WeightedContrastSumExpr = [ WeightedContrastSumExpr 'i' num2str(conIdx) '.*' num2str(nSubjects(i)) '+'];
+                
+                % This is only needed because the variance estimate have already been divided by sample size;            
+                estimatedSigmaSquaredExpr = [estimatedSigmaSquaredExpr 'i' num2str(varIdx) '.*' num2str(nSubjects(i)-1) '+'];
+%                 estimatedSigmaSquaredExpr = [estimatedSigmaSquaredExpr 'i' num2str(varIdx) '.*' num2str(nSubjects(i)-1) '.*' num2str(nSubjects(i)) '+'];
+            end
+            % Remove trailing '+'   
+            WeightedContrastSumExpr(end) = '';
+            estimatedSigmaSquaredExpr(end) = '';
+            
+            WeightedContrastSumExpr = ['(' WeightedContrastSumExpr ')'];
+            
+            % Multiply by 1/sum(ni-1)          
+            estimatedSigmaSquaredExpr = ['1/' num2str(sum(nSubjects-1)) '.*(' estimatedSigmaSquaredExpr ')'];
+            
+            expr = ['1/sqrt(' num2str(sum(nSubjects)) ').*' WeightedContrastSumExpr './sqrt(' estimatedSigmaSquaredExpr ')'];
+            
+            % Degrees of freedom            
+            dof = sum(nSubjects-1);       
+        end
+    else
+        error('Unequal variances not available yet')
     end
-    exprSumVar(end:end+1) = '))';
-    exprSumCopeVar(end) = ')';
+
+%     % Get the statistic
+%     %   mega-analysis (FFX)
+%     %   hat_beta_wls = 1 / sum ( 1/ sigma^2_i ) sum ( cope_i / sigma^2_i )
+%     %   Cov(hat_beta_ls) = 1 / sum ( 1/ sigma^2_i )
+%     %   stat_wls = 1 / sqrt( sum ( 1/ sigma^2_i ) ) sum ( cope_i / sigma^2_i )
+%     exprSumVar = 'sqrt(1./(';
+%     exprSumCopeVar = '(';
+%     for i = 1:nStudies
+%         exprSumVar = [exprSumVar '1./i' num2str(i+nStudies) '+'];
+%         exprSumCopeVar = [exprSumCopeVar 'i' num2str(i) './i' num2str(i+nStudies) '+'];
+%     end
+%     exprSumVar(end:end+1) = '))';
+%     exprSumCopeVar(end) = ')';
     
     matlabbatch{1}.spm.util.imcalc.input = [contrastFiles ;varContrastFiles];
     matlabbatch{1}.spm.util.imcalc.output = statFile;
     matlabbatch{1}.spm.util.imcalc.outdir = {outDir};
-    matlabbatch{1}.spm.util.imcalc.expression = [exprSumVar '.*' exprSumCopeVar];
+    matlabbatch{1}.spm.util.imcalc.expression = expr;% [exprSumVar '.*' exprSumCopeVar];
     matlabbatch{1}.spm.util.imcalc.options.dmtx = 0;
     matlabbatch{1}.spm.util.imcalc.options.dtype = 16;
 
     spm_jobman('run', matlabbatch);
     clear matlabbatch;
     
-    dof = sum(nSubjects-1)-1;
+%     dof = sum(nSubjects-1)-1;
 
     % Get the probability
     matlabbatch{1}.spm.util.imcalc.input = {statFile};

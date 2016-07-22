@@ -13,8 +13,51 @@ function megaffx = ibma_config_mega_ffx()
 % Camille Maumet
 
     dir = ibma_config_analysis_dir();
+
+    samplesSizeEqual      = cfg_choice;
+    samplesSizeEqual.tag  = 'equal';
+    samplesSizeEqual.name = 'Equal';
+    samplesSizeEqual.val  = {ibma_config_nsubjects(true)};
+    samplesSizeEqual.values  = {ibma_config_nsubjects(true)};
+    samplesSizeEqual.help = {'Equal sample sizes in each study.'};
     
-    nSubjects = ibma_config_nsubjects();
+    samplesSizeUnequal      = cfg_choice;
+    samplesSizeUnequal.tag  = 'unequal';
+    samplesSizeUnequal.name = 'Unequal';
+    samplesSizeUnequal.val  = {ibma_config_nsubjects(false)};
+    samplesSizeUnequal.values  = {ibma_config_nsubjects(false)};
+    samplesSizeUnequal.help = {'Unequal sample sizes.'};
+
+    samplesSize         = cfg_choice;
+    samplesSize.name    = 'Sample size';
+    samplesSize.tag     = 'samplesize';
+    samplesSize.values  = {samplesSizeEqual; samplesSizeUnequal};
+    samplesSize.val     = {samplesSizeEqual};
+    
+    varianceEqual      = cfg_const;
+    varianceEqual.tag  = 'equal';
+    varianceEqual.name = 'Equal';
+    varianceEqual.val  = {1};
+    varianceEqual.help = {'Equal variances across studies (regardless of sample-size).'};
+    
+    varianceUnequal      = cfg_const;
+    varianceUnequal.tag  = 'unequal';
+    varianceUnequal.name = 'Unequal';
+    varianceUnequal.val  = {1};
+    varianceUnequal.help = {'Unequal variances across studies.'};
+
+    studyVariances         = cfg_choice;
+    studyVariances.name    = 'Variance across studies';
+    studyVariances.tag     = 'variances';
+    studyVariances.values  = {varianceEqual; varianceUnequal};
+    studyVariances.val     = {varianceEqual};
+        
+    nSubjects         = cfg_entry;
+    nSubjects.tag     = 'nsubjects';
+    nSubjects.name    = 'Number of subjects per studies';
+    nSubjects.help    = {'Number of subjects per studies'};
+    nSubjects.strtype = 'e';
+    nSubjects.num     = [Inf 1];
 
     conFiles = ibma_config_contrast_files();
     
@@ -23,7 +66,7 @@ function megaffx = ibma_config_mega_ffx()
     megaffx = cfg_exbranch;
     megaffx.tag     = 'megaffx';
     megaffx.name    = 'Third-level FFX';
-    megaffx.val     = {dir nSubjects conFiles varConfiles};
+    megaffx.val     = {dir conFiles varConfiles samplesSize studyVariances};
     megaffx.help    = {'Third-level of a hierarachical GLM using FFX (at the third-level only).'};
     megaffx.prog = @ibma_run_mega_ffx;
     megaffx.check = @ibma_check_mega_ffx;
@@ -31,16 +74,28 @@ end
 
 function t = ibma_check_mega_ffx(job)
     t={};
-    % nSubjects must have exactly one value per study
-    numValues = numel(job.nsubjects);
-    numStudies = numel(job.confiles);
-    if numValues ~= numStudies
-        t = {['Wrong number of values for number of subjects: ' ...
-            num2str(numValues) ' values for ' num2str(numStudies) ' studies.' ] };
-    end
-    numVariances = numel(job.varconfiles);
-    if numVariances ~= numStudies
-        t = {['Wrong number of contrast variances: ' ...
-            num2str(numVariances) ' variances for ' num2str(numStudies) ' studies.' ] };
+    if isfield(job.samplesize, 'unequal')
+        % nSubjects must have exactly one value per study
+        numValues = numel(job.samplesize.unequal.nsubjects);
+        numStudies = numel(job.confiles);
+        if numValues ~= numStudies
+            t = {['Wrong number of values for number of subjects: ' ...
+                num2str(numValues) ' values for ' num2str(numStudies) ' studies'...
+                '(unequal sample sizes).'] };
+        end
+        numVariances = numel(job.varconfiles);
+        if numVariances ~= numStudies
+            t = {['Wrong number of contrast variances: ' ...
+                num2str(numVariances) ' variances for ' num2str(numStudies) ' studies.'...
+                '(unequal sample sizes).'] };
+        end
+    elseif isfield(job.samplesize, 'equal')
+        numValues = numel(job.samplesize.equal.nsubjects);
+        if numValues ~= 1
+            t = {['Wrong number of values for number of subjects: ' ...
+                num2str(numValues) ' values instead of 1 (equal sample sizes).' ] };
+        end
+    else
+        error('Missing field sample size')
     end
 end

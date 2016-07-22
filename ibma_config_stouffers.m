@@ -25,5 +25,4 @@ function stouffersconfig = ibma_config_stouffers()
     stouffersconfig.prog = @ibma_run_stouffers;
     % TODO
     % stouffersconfig.vout = @todo;
-endo;
 end
