@@ -9,7 +9,7 @@ coordSpace = searchforID(coordSpaceId, graph);
 dim = str2num(coordSpace.('nidm_dimensionsInVoxels'))';
 
  %Create the excursionSet accounting for NaNs.
-    V=spm_vol('QMap.nii');
+    V=spm_vol('BSVarMap.nii');
     M=V.mat;
     [T,XYZ]=spm_read_vols(V,1);
     I = ~isnan(T);
@@ -27,7 +27,7 @@ dim = str2num(coordSpace.('nidm_dimensionsInVoxels'))';
     mip = spm_mip(Tth,pXYZ(1:3,:),Ms*Md*M,units);
     
     %Write the image:
-    mipPath = spm_file(fullfile(pwd, 'QMIP.png'));
+    mipPath = spm_file(fullfile(pwd, 'BSVarMIP.png'));
     imwrite(mip,gray(64),mipPath,'png');
 
 %Obtain coords

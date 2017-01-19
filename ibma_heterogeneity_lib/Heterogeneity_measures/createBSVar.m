@@ -23,16 +23,16 @@ function createBSVar(CElist, CSElist, outdir)
     sum = '(';
     sumSquare = '(';
     for(i = 1:(length-1))
-        sum = [sum, '(1./(i', num2str(i), '))+'];
-        sumSquare = [sumSquare, '(1./(i', num2str(i), '.^2))+'];
+        sum = [sum, '(1./(i', num2str(i), '.^2))+'];
+        sumSquare = [sumSquare, '(1./(i', num2str(i), '.^4))+'];
     end 
-    sum = [sum, '(1./(i', num2str(length), ')))'];
-    sumSquare = [sumSquare, '(1./(i', num2str(length), '.^2)))'];
+    sum = [sum, '(1./(i', num2str(length), '.^2)))'];
+    sumSquare = [sumSquare, '(1./(i', num2str(length), '.^4)))'];
     
     %Write string for the overall expression.
     numerator = ['((i', num2str(length+1), ')-', num2str(length-1), ')'];
     denominator = ['(', sum, '-(', sumSquare, './', sum, '))']; 
-    expression = [numerator, './', denominator];
+    expression = ['max(', numerator, './', denominator, ', 0)'];
     
     %Make the batch.
     matlabbatch{1}.spm.util.imcalc.input = [CSElist, path]';

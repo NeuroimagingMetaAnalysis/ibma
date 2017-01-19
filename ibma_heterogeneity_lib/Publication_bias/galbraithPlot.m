@@ -1,6 +1,6 @@
 %==========================================================================
-%Generates a funnel plot of Contrast Estimates against standard error. It 
-%takes the following inputs.
+%Generates a Galbraith plot of standardized effect against inverse 
+%Contrast Estimate. It takes the following inputs.
 %
 %src, event - these are needed for callback event handling.
 %CElist - a column cell array of contrast estimate NII filepaths.
@@ -10,11 +10,11 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function funnelPlot(src, event, CElist, CSElist)
+function galbraithPlot(src, event, CElist, CSElist)
     
     XYZ = spm_orthviews('Pos',1);
     XYZ = round(XYZ);
-    
+
     %Calculate number of studies.
     length = max(size(CElist));
     
@@ -32,19 +32,17 @@ function funnelPlot(src, event, CElist, CSElist)
         
     end 
     
-    %Obtain coefficient for funnel.
+    %Obtain coefficient for galbraith.
     z = norminv(0.995);
     
     %Plot results.
     figure();
-    scatter(contrast, contrastSE, 'x');
-    set(gca,'YDir','reverse');
-    ylim([-max(contrastSE)/10, max(contrastSE)]);
+    scatter(1./contrastSE, contrast./contrastSE, 'x');
     
     %Add labels.
-    title(['Funnel plot for MNI(', num2str(XYZ(1)), ', ', num2str(XYZ(2)), ', ', num2str(XYZ(3)), ')']);
-    xlabel('Contrast Estimate');
-    ylabel('Standard Error');
+    title(['Galbraith plot for MNI(', num2str(XYZ(1)), ', ', num2str(XYZ(2)), ', ', num2str(XYZ(3)), ')']);
+    xlabel('Inverse Standard Error');
+    ylabel('Standardized Contrast Estimate');
     
     %Calculate FFX statistic values.
     weightsFFX = 1./(contrastSE.^2);
@@ -60,15 +58,16 @@ function funnelPlot(src, event, CElist, CSElist)
     
     %Add these values to scatter plot.
     hold on;
-    scatter(thetahatFFX, sqrt(varFFX), 'o');
-    scatter(thetahatRFX, sqrt(varRFX), 'd');
+    scatter(1/sqrt(varFFX),thetahatFFX/sqrt(varFFX), 'o');
+    scatter(1/sqrt(varRFX),thetahatRFX/sqrt(varRFX), 'd');
     hold off;
     
     %Add key.
     legend('Study data','Fixed effects','Random effects');
     
-    %Plot funnel.
-    line([thetahatFFX,(thetahatFFX-z*max(contrastSE))], [0, max(contrastSE)])
-    line([thetahatFFX,(thetahatFFX+z*max(contrastSE))], [0, max(contrastSE)])
+    %Plot interval.
+    refline(thetahatFFX, -1.96);
+    refline(thetahatFFX, 0);
+    refline(thetahatFFX, 1.96);
     
 end 

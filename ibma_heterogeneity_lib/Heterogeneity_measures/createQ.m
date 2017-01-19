@@ -13,8 +13,8 @@
 function createQ(CElist, CSElist, outdir)
     
     %Create an overall observed effect NIFTI file.
-    path = fullfile(outdir, 'OOEMap.nii');
-    createOOE(CElist, CSElist, outdir);
+    path = fullfile(outdir, 'OOE_FFXMap.nii');
+    createOOE_FFX(CElist, CSElist, outdir);
     
     %Calculate number of studies
     length = max(size(CElist));

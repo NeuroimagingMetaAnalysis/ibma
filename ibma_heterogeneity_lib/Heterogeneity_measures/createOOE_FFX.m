@@ -10,7 +10,7 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function createOOE(CElist, CSElist, outdir)
+function createOOE_FFX(CElist, CSElist, outdir)
 
     %Find out how many studies are being used:
     length = max(size(CSElist));
@@ -34,7 +34,7 @@ function createOOE(CElist, CSElist, outdir)
     
     %Create the batch variable.
     matlabbatch{1}.spm.util.imcalc.input = [CElist, CSElist]';
-    matlabbatch{1}.spm.util.imcalc.output = 'OOEMap';
+    matlabbatch{1}.spm.util.imcalc.output = 'OOE_FFXMap';
     matlabbatch{1}.spm.util.imcalc.outdir = {outdir};
     matlabbatch{1}.spm.util.imcalc.expression = string;
     matlabbatch{1}.spm.util.imcalc.var = struct('name', {}, 'value', {});
