@@ -13,6 +13,9 @@
 
 function ibma_diag_tool(contrastPaths, contrastSEPaths, outDir, statType)
 
+    addpath(fullfile(fileparts(mfilename('fullpath')), 'ibma_heterogeneity_lib', 'Publication_bias'));
+    addpath(fullfile(fileparts(mfilename('fullpath')), 'ibma_heterogeneity_lib', 'Heterogeneity_measures'));
+    
     %Created the map the user has specified and open it.
     if isfield(statType, 'statType_Q')
         createQ(contrastPaths', contrastSEPaths', outDir);
@@ -37,9 +40,9 @@ function ibma_diag_tool(contrastPaths, contrastSEPaths, outDir, statType)
     voxelStat = uimenu('Label','Voxel Statistics', 'Parent',ToolsMenu);
     voxelAdv = uimenu('Label','Voxel Advice', 'Parent',ToolsMenu);
     
-    %Add plot options to the voxel diagnosis.
+    %Add plot options to the voxel plots.
     uimenu('Label','Funnel Plot', 'Parent',voxelPlot, 'Callback',{@funnelPlot, contrastPaths', contrastSEPaths'});
-    uimenu('Label','Gailbraith Plot', 'Parent',voxelPlot, 'Callback',{@galbraithPlot, contrastPaths', contrastSEPaths'});
+    uimenu('Label','Galbraith Plot', 'Parent',voxelPlot, 'Callback',{@galbraithPlot, contrastPaths', contrastSEPaths'});
     uimenu('Label','Forest Plot', 'Parent',voxelPlot, 'Callback',{@forestPlot, contrastPaths', contrastSEPaths'});
     
 end

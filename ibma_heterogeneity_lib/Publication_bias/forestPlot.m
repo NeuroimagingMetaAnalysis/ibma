@@ -67,7 +67,7 @@ function forestPlot(src, event,CElist, CSElist)
     scatter(thetahatFFX, 0, 'x')
     
     %Add line for RFX.
-    p3 = line([(thetahatFFX-z*sqrt(varFFX)),(thetahatFFX+z*sqrt(varFFX))], [-1,-1], 'color', [1 .5 0]);
+    p3 = line([(thetahatRFX-z*sqrt(varRFX)),(thetahatRFX+z*sqrt(varRFX))], [-1,-1], 'color', [1 .5 0]);
     scatter(thetahatRFX, -1, 'x')
      
     %Add key.
