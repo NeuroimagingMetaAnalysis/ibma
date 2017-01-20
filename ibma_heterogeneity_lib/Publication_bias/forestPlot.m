@@ -73,4 +73,6 @@ function forestPlot(src, event,CElist, CSElist)
     %Add key.
     legend([p1, p2, p3], 'Study data','Fixed effects','Random effects');
     
+    line([0,0], [-2, length+1], [0,0], 'linestyle', '- -', 'color', [0 0 0])
+    
 end 
