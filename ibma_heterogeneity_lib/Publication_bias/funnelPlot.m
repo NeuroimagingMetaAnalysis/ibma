@@ -1,5 +1,5 @@
 %==========================================================================
-%Generates a funnel plot of Contrast Estimates against standard error. It 
+%Generates a funnel plot of Contrast Estimates against standard error. It
 %takes the following inputs.
 %
 %src, event - these are needed for callback event handling.

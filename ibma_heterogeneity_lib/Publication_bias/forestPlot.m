@@ -9,7 +9,7 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function forestPlot(src, event,CElist, CSElist)
+function forestPlot(src, event, CElist, CSElist)
       
     XYZ = spm_orthviews('Pos',1);
     XYZ = round(XYZ);
