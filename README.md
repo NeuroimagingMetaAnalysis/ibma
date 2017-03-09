@@ -16,11 +16,11 @@ To use the tool first open SPM in Matlab:
 
 In the menu window select batch.
 
-<img src="ibma_heterogeneity_doc/example1.png" width="300">           
+<img src="ibma_doc/example1.png" width="300">           
 
 Then select SPM -> Tools -> Image-Based Meta-Analysis Tools -> Diagnose Heterogeneity.
 
-<img src="ibma_heterogeneity_doc/example2.png" width="300"> 
+<img src="ibma_doc/example2.png" width="300"> 
 
 Fill the batch with the appropriate study data (nii's must be unzipped) and select
 which statistic you wish to view and run the batch with the green triangle button.

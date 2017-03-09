@@ -20,7 +20,7 @@ function nSubjects = ibma_config_nsubjects(sameForAllStudies)
         num = [Inf 1];
     end
     
-    name = 'Number of subjects per studies';
+    name = 'Number of subjects per study';
     
     nSubjects         = cfg_entry;
     nSubjects.tag     = 'nsubjects';

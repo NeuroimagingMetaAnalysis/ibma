@@ -10,15 +10,27 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function funnelPlot(src, event, CElist, CSElist)
+function funnelPlot(src, event, CElist, CSElist, XYZ)
     
-    XYZ = spm_orthviews('Pos',1);
+    %XYZ = spm_orthviews('Pos',1);
     XYZ = round(XYZ);
     
     %Calculate number of studies.
     length = max(size(CElist));
     
     for(i = 1:length)
+        
+        %Read in the volume/s.
+        originalVol       = spm_vol(CElist{i});
+        
+        %To check scaling take the mean of the middle slice
+        middleSlice = floor(originalVol.dim(3)/2);
+        img      = spm_slice_vol(originalVol,spm_matrix([0 0 middleSlice]),...
+                                                    originalVol.dim(1:2),0);
+        largeScale = false;
+        if(mean(img(img>0))>150)
+            largeScale = true;
+        end
         
         %Obtain the contrast estimate at XYZ for each study.
         V=spm_vol(CElist{i});
@@ -30,10 +42,14 @@ function funnelPlot(src, event, CElist, CSElist)
         CSEVol=spm_read_vols(V,1);
         contrastSE(i) = CSEVol(XYZ(1), XYZ(2), XYZ(3));
         
+        if largeScale
+            contrastSE(i)=contrastSE(i)/100; 
+            contrast(i)=contrast(i)/100;
+        end
     end 
     
     %Obtain coefficient for funnel.
-    z = norminv(0.995);
+    z = norminv(0.9999);
     
     %Plot results.
     figure();

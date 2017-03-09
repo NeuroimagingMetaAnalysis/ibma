@@ -24,6 +24,7 @@ function ibma = tbx_cfg_ibma()
                     'Image-Based NeuroImaging Meta-Analysis.'
   }';
   ibma.values  = {ibma_config_fishers ibma_config_stouffers ibma_config_weighted_z...
-      ibma_config_mega_rfx ibma_config_mega_ffx ibma_config_diag_tool};
+      ibma_config_mega_rfx ibma_config_mega_ffx ibma_config_hetdiag_tool...
+      ibma_config_biasdiag_tool};
   
 end

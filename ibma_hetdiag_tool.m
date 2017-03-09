@@ -11,10 +11,9 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function ibma_diag_tool(contrastPaths, contrastSEPaths, outDir, statType)
+function ibma_hetdiag_tool(contrastPaths, contrastSEPaths, outDir, statType)
 
-    addpath(fullfile(fileparts(mfilename('fullpath')), 'ibma_heterogeneity_lib', 'Publication_bias'));
-    addpath(fullfile(fileparts(mfilename('fullpath')), 'ibma_heterogeneity_lib', 'Heterogeneity_measures'));
+    addpath(fullfile(fileparts(mfilename('fullpath')), 'ibma_lib', 'Heterogeneity_measures'));
     
     %Created the map the user has specified and open it.
     if isfield(statType, 'statType_Q')
@@ -37,8 +36,6 @@ function ibma_diag_tool(contrastPaths, contrastSEPaths, outDir, statType)
     %Add the voxel diagnosis to the toolbar.
     ToolsMenu = findall(gcf, 'tag', 'figMenuTools');
     voxelPlot = uimenu('Label','Voxel Plot', 'Parent',ToolsMenu,'Separator','on');
-    voxelStat = uimenu('Label','Voxel Statistics', 'Parent', ToolsMenu,'Callback',{@voxelStatistics, contrastPaths', contrastSEPaths'});
-    voxelAdv = uimenu('Label','Voxel Advice', 'Parent',ToolsMenu);
     
     %Add plot options to the voxel plots.
     uimenu('Label','Funnel Plot', 'Parent',voxelPlot, 'Callback',{@funnelPlot, contrastPaths', contrastSEPaths'});
