@@ -88,20 +88,22 @@ function ibma_run_biasdiag_tool(job)
         ConE = dataEntry.dataEntry_files.ConE;
         ConSE = dataEntry.dataEntry_files.ConSE;
         dir = dataEntry.dataEntry_files.dir;
-        if isfield(dataEntry.dataEntry_files, 'nSubjects')
-            sampleSizes = dataEntry.nSubjects;
+        if isfield(dataEntry.dataEntry_files, 'nsubjects')
+            sampleSizes = dataEntry.dataEntry_files.nsubjects;
         end
     else
-        [ConE, ConSE, sampleSizes] = obtainNIDMData(dataEntry_nidm.dataEntry_nidmPacks);%funct to write
-        dir = dataEntry.dataEntry_nidmPacks.dir;
+        [ConE, ConSE, sampleSizes] = obtainNIDMData(dataEntry.dataEntry_nidm.dataEntry_nidmPacks, dataEntry.dataEntry_nidm.dataEntry_exNums);
+        dir = dataEntry.dataEntry_nidm.dir;
     end
     
-    if ~isempty(sampleSizes)
-        ibma_biasdiag_tool(ConE, ConSE, dir{1}, statType, estimator, 0, sampleSizes);
+    masking = job.masking;
+    
+    if strcmp(statType, 'MacaskillRegression')
+        ibma_biasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator, 0, sampleSizes);
     elseif strcmp(statType, 'EggerRegression')
-        ibma_biasdiag_tool(ConE, ConSE, dir{1}, statType, estimator, weighting);
+        ibma_biasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator, weighting);
     else 
-        ibma_biasdiag_tool(ConE, ConSE, dir{1}, statType, estimator);
+        ibma_biasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator);
     end
     
 end

@@ -2,6 +2,7 @@
 %Creates the statistic map, opens the statistic map and adds the tools
 %option for voxel diagnosis.
 %
+%masking - the masking job structure.
 %CElist - a column cell array of contrast estimate NII filepaths.
 %CSElist - a column cell array of contrast standard error NII filepaths in
 %          order corresponding to CElist. 
@@ -11,35 +12,20 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function ibma_hetdiag_tool(contrastPaths, contrastSEPaths, outDir, statType)
+function ibma_hetdiag_tool(masking, contrastPaths, contrastSEPaths, outDir, statType)
 
     addpath(fullfile(fileparts(mfilename('fullpath')), 'ibma_lib', 'Heterogeneity_measures'));
     
     %Created the map the user has specified and open it.
+    dataStruct = createHetMeasure(masking, contrastPaths', contrastSEPaths', outDir);
     if isfield(statType, 'statType_Q')
-        createQ(contrastPaths', contrastSEPaths', outDir);
-        spm_image('Display', fullfile(outDir,'QMap.nii'));
+        mapName = 'QHeterogeneityMap.nii';
     elseif isfield(statType, 'statType_I2')
-        createI2(contrastPaths', contrastSEPaths', outDir);
-        spm_image('Display', fullfile(outDir,'I2Map.nii'));
-    elseif isfield(statType, 'statType_OOE_FFX')
-        createOOE_FFX(contrastPaths', contrastSEPaths', outDir);
-        spm_image('Display', fullfile(outDir,'OOE_FFXMap.nii'));
-    elseif isfield(statType, 'statType_OOE_RFX')
-        createOOE_RFX(contrastPaths', contrastSEPaths', outDir);
-        spm_image('Display', fullfile(outDir,'OOE_RFXMap.nii'));
+        mapName = 'I2HeterogeneityMap.nii';
     else 
-        createBSVar(contrastPaths', contrastSEPaths', outDir);
-        spm_image('Display', fullfile(outDir,'BSVarMap.nii'));
+        mapName = 'PHeterogeneityMap.nii';
     end
     
-    %Add the voxel diagnosis to the toolbar.
-    ToolsMenu = findall(gcf, 'tag', 'figMenuTools');
-    voxelPlot = uimenu('Label','Voxel Plot', 'Parent',ToolsMenu,'Separator','on');
+    hetImageDisplay(0, 0, outDir, mapName, dataStruct);
     
-    %Add plot options to the voxel plots.
-    uimenu('Label','Funnel Plot', 'Parent',voxelPlot, 'Callback',{@funnelPlot, contrastPaths', contrastSEPaths'});
-    uimenu('Label','Galbraith Plot', 'Parent',voxelPlot, 'Callback',{@galbraithPlot, contrastPaths', contrastSEPaths'});
-    uimenu('Label','Forest Plot', 'Parent',voxelPlot, 'Callback',{@forestPlot, contrastPaths', contrastSEPaths'});
- 
 end

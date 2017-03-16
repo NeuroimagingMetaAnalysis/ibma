@@ -24,7 +24,7 @@ function diagbiasconfig = ibma_config_biasdiag_tool()
     
     diagbiasconfig = cfg_exbranch;
     diagbiasconfig.tag     = 'diagbias';
-    diagbiasconfig.name    = 'Diagnose Bias';
+    diagbiasconfig.name    = 'Diagnose Publication Bias';
     diagbiasconfig.val     = {statType masking};
     diagbiasconfig.help    = {'Display bias statistic map for further diagnosis.'};
     diagbiasconfig.prog = @ibma_run_biasdiag_tool;

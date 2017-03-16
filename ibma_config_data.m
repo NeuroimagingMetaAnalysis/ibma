@@ -32,9 +32,15 @@ function dataEntry = ibma_config_data(withSampleSizes)
     dataEntry_nidmPacks.tag     = 'dataEntry_nidmPacks';
     dataEntry_nidmPacks.name    = 'NIDM packs';
     dataEntry_nidmPacks.help    = {'Select the NIDM zip files.'};
-    dataEntry_nidmPacks.filter = 'image';
     dataEntry_nidmPacks.ufilter = '.nidm.zip';
     dataEntry_nidmPacks.num     = [1 Inf];  
+    
+    dataEntry_exNums          = cfg_entry;
+    dataEntry_exNums.name     = 'Excursion Set Numbers';
+    dataEntry_exNums.help    = {''};
+    dataEntry_exNums.strtype = 'e';
+    dataEntry_exNums.tag      = 'dataEntry_exNums';
+    dataEntry_exNums.num     = [Inf 1];
     
     if withSampleSizes
         sampleSizes        = ibma_config_nsubjects();
@@ -51,7 +57,7 @@ function dataEntry = ibma_config_data(withSampleSizes)
     dataEntry_nidm          = cfg_exbranch;
     dataEntry_nidm.name     = 'NIDM Input';
     dataEntry_nidm.tag      = 'dataEntry_nidm';
-    dataEntry_nidm.val      = {dir dataEntry_nidmPacks};
+    dataEntry_nidm.val      = {dir dataEntry_nidmPacks dataEntry_exNums};
     
     dataEntry         = cfg_choice;
     dataEntry.name    = 'Select input type:';

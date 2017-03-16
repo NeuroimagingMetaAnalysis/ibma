@@ -2,6 +2,7 @@
 %Creates the statistic map, opens the statistic map and adds the tools
 %option for voxel diagnosis.
 %
+%masking - the masking job structure.
 %CElist - a column cell array of contrast estimate NII filepaths.
 %CSElist - a column cell array of contrast standard error NII filepaths in
 %          order corresponding to CElist. 
@@ -11,7 +12,7 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function ibma_biasdiag_tool(ConE, ConSE, dir, statType, estimator, weighting, sampleSizes)
+function ibma_biasdiag_tool(masking, ConE, ConSE, dir, statType, estimator, weighting, sampleSizes)
     
     
     addpath(fullfile(fileparts(mfilename('fullpath')), 'ibma_lib', 'Preprocessing'));
@@ -20,28 +21,19 @@ function ibma_biasdiag_tool(ConE, ConSE, dir, statType, estimator, weighting, sa
     
     %Create the map the user has specified.
     if strcmp(statType, 'EggerRegression')
-        createRegress(ConE', ConSE', dir, weighting);
+        dataStruct = createRegress(masking, ConE', ConSE', dir, weighting);
         mapName = [weighting, estimator, 'RegressionMap.nii'];
     elseif strcmp(statType, 'MacaskillRegression')
-        createRegress(ConE', ConSE', dir, 'm', sampleSizes);
+        dataStruct = createRegress(masking, ConE', ConSE', dir, 'm', sampleSizes);
         mapName = ['m', estimator, 'RegressionMap.nii'];
     elseif strcmp(statType, 'TrimAndFill')
-        createTrimAndFill(ConE', ConSE', dir);
+        dataStruct = createTrimAndFill(masking, ConE', ConSE', dir);
         mapName = [estimator, 'TrimAndFillMap.nii'];
     else
-        createBeggsCorrelation(ConE', ConSE', dir);
+        dataStruct = createBeggsCorrelation(masking, ConE', ConSE', dir);
         mapName = [estimator, 'BeggsCorrelationMap.nii'];
     end
-        
-    %Display the image.
-    spm_image('Display', fullfile(dir, mapName));
     
-    %Add the voxel diagnosis to the toolbar.
-    ToolsMenu = findall(gcf, 'tag', 'figMenuTools');
-    voxelPlot = uimenu('Label','Voxel Plot', 'Parent',ToolsMenu,'Separator','on');
-    
-    %Add plot options to the voxel plots.
-    uimenu('Label','Funnel Plot', 'Parent',voxelPlot, 'Callback',{@funnelPlot, ConE', ConSE'});
-    uimenu('Label','Galbraith Plot', 'Parent',voxelPlot, 'Callback',{@galbraithPlot, ConE', ConSE'});
+    pubBiasImageDisplay(0, 0, dir, mapName, dataStruct);
  
 end

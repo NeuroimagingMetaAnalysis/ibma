@@ -16,25 +16,25 @@ tm_none.help    = {'No threshold masking'};
 %--------------------------------------------------------------------------
 % athresh Threshold
 %--------------------------------------------------------------------------
-athresh         = cfg_entry;
-athresh.tag     = 'athresh';
-athresh.name    = 'Threshold';
-athresh.help    = {'Enter the absolute value of the threshold.'};
-athresh.strtype = 'r';
-athresh.num     = [1 1];
-athresh.val     = {100};
+pthresh         = cfg_entry;
+pthresh.tag     = 'pthresh';
+pthresh.name    = 'Threshold';
+pthresh.help    = {'Enter the percentage of studies.'};
+pthresh.strtype = 'r';
+pthresh.num     = [1 1];
+pthresh.val     = {100};
 
 %--------------------------------------------------------------------------
-% tma Absolute
+% tmp Absolute
 %--------------------------------------------------------------------------
-tma         = cfg_branch;
-tma.tag     = 'tma';
-tma.name    = 'Absolute';
-tma.val     = {athresh };
-tma.help    = {
-               'Images are thresholded at a given value and only voxels at which all images exceed the threshold are included. '
+tmp         = cfg_branch;
+tmp.tag     = 'tmp';
+tmp.name    = 'Percentage';
+tmp.val     = {pthresh };
+tmp.help    = {
+               'Images are thresholded at a given value and only voxels at which voxels with above that percentage of studies present are kept. '
                ''
-               'This option allows you to specify the absolute value of the threshold.'
+               'This option allows you to specify the percentage value of the threshold.'
 }';
 
 %--------------------------------------------------------------------------
@@ -46,7 +46,7 @@ rthresh.name    = 'Threshold';
 rthresh.help    = {'Enter the threshold as a proportion of the global value.'};
 rthresh.strtype = 'r';
 rthresh.num     = [1 1];
-rthresh.val     = {.8};
+rthresh.val     = {5};
 
 %--------------------------------------------------------------------------
 % tmr Relative
@@ -68,8 +68,8 @@ tm         = cfg_choice;
 tm.tag     = 'tm';
 tm.name    = 'Threshold masking';
 tm.val     = {tm_none};
-tm.help    = {'Images are thresholded at a given value and only voxels at which all images exceed the threshold are included.'};
-tm.values  = {tm_none tma tmr};
+tm.help    = {'Images are thresholded at a given value and only voxels at which the number of studies present are above this value are kept.'};
+tm.values  = {tm_none tmp tmr};
 
 %--------------------------------------------------------------------------
 % im Implicit Mask

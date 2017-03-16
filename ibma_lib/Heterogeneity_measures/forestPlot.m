@@ -1,6 +1,5 @@
 %==========================================================================
-%Generates a funnel plot of Contrast Estimates against standard error. It
-%takes the following inputs.
+%Generates a forest plot of study data. It takes the following inputs.
 %
 %src, event - these are needed for callback event handling.
 %dataStruct - the datastructure returned by preprocessing.
@@ -8,8 +7,8 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function funnelPlot(src, event, dataStruct)
-    
+function forestPlot(src, event, dataStruct)
+      
     XYZ = spm_orthviews('Pos',1);
     XYZ = round(XYZ);
     
@@ -28,21 +27,20 @@ function funnelPlot(src, event, dataStruct)
     length = size(contrast, 1);
     
     if(length == 0)
-        disp('Not enough studies are present at this voxel for plot display.')
+        disp('Not enough studies present at this voxel for plot display')
     else
-        %Obtain coefficient for funnel.
-        z = norminv(0.95);
+        %Obtain coefficient for width.
+        z = norminv(0.975);
 
         %Plot results.
         figure();
-        scatter(contrast, contrastSE, 'x');
-        set(gca,'YDir','reverse');
-        ylim([-max(contrastSE)/10, max(contrastSE)]);
+        scatter(contrast, [1:length], 'x');
+        ylim([-2, length+1]);
 
         %Add labels.
-        title(['Funnel plot for MNI(', num2str(XYZ(1)), ', ', num2str(XYZ(2)), ', ', num2str(XYZ(3)), ')']);
-        xlabel('Contrast Estimate');
-        ylabel('Standard Error');
+        title(['Forest plot for MNI(', num2str(XYZ(1)), ', ', num2str(XYZ(2)), ', ', num2str(XYZ(3)), ')']);
+        xlabel('Study value');
+        ylabel('Study number');
 
         %Calculate FFX statistic values.
         weightsFFX = 1./(contrastSE.^2);
@@ -56,18 +54,24 @@ function funnelPlot(src, event, dataStruct)
         thetahatRFX = dot(weightsRFX, contrast)/(sum(weightsRFX));
         varRFX = 1/sum(weightsRFX);
 
-        %Add these values to scatter plot.
+        %Plot lines.
+        for(i = 1:length)
+            p1 = line([(contrast(i)-z*contrastSE(i)),(contrast(i)+z*contrastSE(i))], [i,i]);
+        end
+
+        %Add line for FFX.
         hold on;
-        scatter(thetahatFFX, sqrt(varFFX), 'o');
-        scatter(thetahatRFX, sqrt(varRFX), 'd');
-        hold off;
+        p2 = line([(thetahatFFX-z*sqrt(varFFX)),(thetahatFFX+z*sqrt(varFFX))], [0,0], 'color', [1 0 0]);
+        scatter(thetahatFFX, 0, 'x')
+
+        %Add line for RFX.
+        p3 = line([(thetahatRFX-z*sqrt(varRFX)),(thetahatRFX+z*sqrt(varRFX))], [-1,-1], 'color', [1 .5 0]);
+        scatter(thetahatRFX, -1, 'x')
 
         %Add key.
-        legend('Study data','Fixed effects','Random effects');
+        legend([p1, p2, p3], 'Study data','Fixed effects','Random effects');
 
-        %Plot funnel.
-        line([thetahatFFX,(thetahatFFX-z*max(contrastSE))], [0, max(contrastSE)])
-        line([thetahatFFX,(thetahatFFX+z*max(contrastSE))], [0, max(contrastSE)])
+        line([0,0], [-2, length+1], [0,0], 'linestyle', '- -', 'color', [0 0 0])
     end
 
 end 

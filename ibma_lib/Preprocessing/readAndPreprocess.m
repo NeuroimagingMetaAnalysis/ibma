@@ -5,10 +5,25 @@
 %CElist - a column cell array of contrast estimate NII filepaths.
 %CSElist - a column cell array of contrast standard error NII filepaths in
 %          order corresponding to CElist. 
+%masking - the masking job structure.
 %
 %Authors: Thomas Maullin
 %==========================================================================
-function dataStruct = readAndPreprocess(CElist, CSElist, masktype)
+function dataStruct = readAndPreprocess(CElist, CSElist, masking)
+    
+    if ~isempty(masking.em{1})
+        %Ensure all images are the same size.
+        mask = strrep(masking.em, ',1', '');
+        flags.interp=0;
+        spm_reslice({CElist{:}, CSElist{:}, mask{1}}, flags);
+    else
+        flags.interp=0;
+        spm_reslice({CElist{:}, CSElist{:}}, flags);
+    end
+    
+    %We now want to look at the resliced images.
+    CElist = cellfun(@(x) prefixAdd(x), CElist, 'UniformOutput', false);
+    CSElist = cellfun(@(x) prefixAdd(x), CSElist, 'UniformOutput', false);
     
     %Read in the data.                
     for(i = 1:length(CElist))
@@ -27,32 +42,26 @@ function dataStruct = readAndPreprocess(CElist, CSElist, masktype)
             img = img./100;
             img2 = img2./100;
         end
-        
-        if strcmp(masktype,'nan')
-            toMakeNaN = img2==0;
-            img(toMakeNaN) = NaN;
-            img2(toMakeNaN) = NaN;
-        elseif strcmp(masktype,'zero')
-            toMakezero = isnan(img2);
-            img(toMakezero) = 0;
-            img2(toMakezero) = Inf;
-        else
-        end
+
+        toMakeNaN = img2==0;
+        img(toMakeNaN) = NaN;
+        img2(toMakeNaN) = NaN;
         
         conDataStructure(:,:,:,i) = img;  
         conSEDataStructure(:,:,:,i) = img2;
         
-        if strcmp(masktype,'nan')
-            usefulEntries(:, :, :, i) = ~isnan(img);
-        elseif strcmp(masktype,'zero')
-            usefulEntries(:, :, :, i) = img~=0;
-        else
-        end
     end
-    
-    usefulEntries = sum(usefulEntries, 4);
     
     dataStruct = {conDataStructure, conSEDataStructure, originalVol};
     
 end
+%--------------------------------------------------------------------------
+%This function changes a full path to a file by the filepath and the files
+%name with the prefix 'r'.
+%--------------------------------------------------------------------------
+function path = prefixAdd(fullpath)
+
+    [filepath, filename, ext] = fileparts(fullpath);
+    path = [filepath, filesep, 'r', filename, ext];
     
+end

@@ -82,8 +82,8 @@ function statType = ibma_config_biasStatType()
      statType_EggerRegression_weighted_intercepts      = cfg_choice;
      statType_EggerRegression_weighted_intercepts.tag  = 'statType_EggerRegression_weighted_intercepts';
      statType_EggerRegression_weighted_intercepts.name = 'Intercepts';
-     statType_EggerRegression_weighted_intercepts.values = {dataLeafWithSubjects};
-     statType_EggerRegression_weighted_intercepts.val  = {dataLeafWithSubjects};
+     statType_EggerRegression_weighted_intercepts.values = {dataLeaf};
+     statType_EggerRegression_weighted_intercepts.val  = {dataLeaf};
      statType_EggerRegression_weighted_intercepts.help = {['Intercepts obtained from Egger weighted',...
                                                             ' Regression.']};
                                                         
@@ -98,8 +98,8 @@ function statType = ibma_config_biasStatType()
      statType_EggerRegression_weighted_pVal      = cfg_choice;
      statType_EggerRegression_weighted_pVal.tag  = 'statType_EggerRegression_weighted_pVal';
      statType_EggerRegression_weighted_pVal.name = 'P-values';
-     statType_EggerRegression_weighted_pVal.values = {dataLeafWithSubjects};
-     statType_EggerRegression_weighted_pVal.val  = {dataLeafWithSubjects};
+     statType_EggerRegression_weighted_pVal.values = {dataLeaf};
+     statType_EggerRegression_weighted_pVal.val  = {dataLeaf};
      statType_EggerRegression_weighted_pVal.help = {['P values for the null hypothesis that the Egger',...
                                                     ' Weighted Regression intercept is zero.']};
    

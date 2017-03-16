@@ -11,31 +11,33 @@
 %Authors: Thomas Maullin
 %==========================================================================
 
-function createHetMeasure(CElist, CSElist, outdir)
-
-    tic
+function dataStruct = createHetMeasure(masking, CElist, CSElist, outdir)
     
     %Firstly we read in the data.                
-    dataStruct = readAndPreprocess(CElist, CSElist, 'nan');
+    dataStruct = readAndPreprocess(CElist, CSElist, masking);
+    
+    spm_progress_bar('Init',5,'Trim And Fill Map','Current stage');
+    
     conDataStructure = dataStruct{1};
     conSEDataStructure = dataStruct{2};
     originalVol = dataStruct{3};
     
+    spm_progress_bar('Set',1);
+    
     %We reshape it for efficiency reasons.
-    conDataStructure = reshape(conDataStructure, [91*109*91, 21]);
-    conSEDataStructure = reshape(conSEDataStructure, [91*109*91, 21]);
+    conDataStructure = reshape(conDataStructure, [91*109*91, length(CElist)]);
+    conSEDataStructure = reshape(conSEDataStructure, [91*109*91, length(CElist)]);
     
-    %We work out which entries are useful to us.
-    usefulEntries = ~isnan(conDataStructure);
-    lengthUseful = sum(usefulEntries,2);
+    %Apply thresholding.
+    [threshVec, lengthUseful] = obtainMaskVoxels(masking, conDataStructure);
     
-    %Threshold them.
-    threshVec = lengthUseful>min(10,length(CElist)/2);
+    spm_progress_bar('Set',2);
     
     %We now only look at the thresholded voxels.
     effectSize = conDataStructure(threshVec==1,:);
     seValues = conSEDataStructure(threshVec==1,:);
-    lengthUseful = lengthUseful(threshVec==1);
+    
+    spm_progress_bar('Set',3);
     
     %Calculate the weights and overall observed effect under ffx.
     weights = 1./seValues.^2;
@@ -45,6 +47,8 @@ function createHetMeasure(CElist, CSElist, outdir)
     voxelValues_Q = nansum(weights.*((thetahat-effectSize).^2),2);
     voxelValues_I2 = max((voxelValues_Q-lengthUseful+1)./voxelValues_Q,0);
     voxelValues_P = -log10(chi2pdf(voxelValues_Q,lengthUseful-1));
+    
+    spm_progress_bar('Set',4);
     
     %Create the final maps
     finalMap_Q = repmat(nan, 91*109*91, 1);
@@ -69,6 +73,8 @@ function createHetMeasure(CElist, CSElist, outdir)
     filename_I2 = 'I2HeterogeneityMap.nii';
     filename_P = 'PHeterogeneityMap.nii';
     
+    spm_progress_bar('Set',5);
+    
     %Output the maps of interest.
     newVol_Q.fname = fullfile(outdir, filename_Q);
     newVol_Q       = spm_create_vol(newVol_Q);
@@ -82,6 +88,6 @@ function createHetMeasure(CElist, CSElist, outdir)
     newVol_P       = spm_create_vol(newVol_P);
     newVol_P       = spm_write_vol(newVol_P,finalMap_P);
     
-    toc
+    spm_progress_bar('Clear');
     
 end
