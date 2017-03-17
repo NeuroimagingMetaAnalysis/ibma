@@ -1,14 +1,16 @@
 %==========================================================================
-%This function performs masking on a list of voxels. It takes in 2 inputs:
+%This function performs masking on a list of voxels. It takes in 4 inputs:
 %
 %masking - the masking job object.
 %voxelList - a 2d array of voxel values in the shape of studies by voxels.
+%originalVol - the volume the mask was resliced to.
+%outdir - the output directory.
 %
 %Authors: Thomas Maullin
 %==========================================================================
 
-function [threshVec, lengthUseful] = obtainMaskVoxels(masking, voxelList)
-    
+function [threshVec, lengthUseful] = obtainMaskVoxels(masking, voxelList, originalVol, outdir)
+
     %Calculate the number of studies and number of voxels.
     studyNumber = size(voxelList, 2);
     voxelNumber = size(voxelList, 1);
@@ -63,6 +65,24 @@ function [threshVec, lengthUseful] = obtainMaskVoxels(masking, voxelList)
         %Threshold
         threshVec(mask<1) = 0;
     end
+    
+    %----------------------------------------------------------------------
+    %Now we have lengthUseful, we can output a map showing how many studies
+    %are present at each voxel.
+    %----------------------------------------------------------------------
+    
+    lengthUsefulMap = reshape(lengthUseful, [91, 109, 91]);
+    
+    %Create the new volume.
+    newVol       = rmfield(originalVol, {'n', 'descrip', 'private'});
+    
+    %Create the filename.
+    filename = 'studyNumberMap.nii';
+    
+    %Output the map.
+    newVol.fname = fullfile(outdir, filename);
+    newVol       = spm_create_vol(newVol);
+    newVol       = spm_write_vol(newVol,lengthUsefulMap);
     
     %----------------------------------------------------------------------
     

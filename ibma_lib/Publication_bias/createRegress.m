@@ -46,7 +46,7 @@ function dataStruct = createRegress(masking, CElist, CSElist, outdir, type, samp
     end
     
     %Apply thresholding.
-    [threshVec, lengthUseful] = obtainMaskVoxels(masking, conDataStructure);
+    [threshVec, lengthUseful] = obtainMaskVoxels(masking, conDataStructure, originalVol, outdir);
     lengthThresh=sum(threshVec);
     
     spm_progress_bar('Init',floor(lengthThresh/200)+3,'Regression Map','Current stage');

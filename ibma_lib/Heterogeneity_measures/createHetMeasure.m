@@ -29,7 +29,7 @@ function dataStruct = createHetMeasure(masking, CElist, CSElist, outdir)
     conSEDataStructure = reshape(conSEDataStructure, [91*109*91, length(CElist)]);
     
     %Apply thresholding.
-    [threshVec, lengthUseful] = obtainMaskVoxels(masking, conDataStructure);
+    [threshVec, lengthUseful] = obtainMaskVoxels(masking, conDataStructure, originalVol, outdir);
     
     spm_progress_bar('Set',2);
     

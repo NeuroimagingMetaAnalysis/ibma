@@ -16,13 +16,14 @@ function [contrastMaps, contrastSEMaps, sampleSizes] = obtainNIDMData(nidmPackLi
         %If it is zipped unzip it.
         if contains(nidmPackList{i}, '.zip')
             [path, filename] = fileparts(nidmPackList{i});
-            %unzip(nidmPackList{i}, fullfile(path, filename));
+            unzip(nidmPackList{i}, fullfile(path, filename));
             nidmPackList{i} = fullfile(path, filename);
         end
         
         %Find out what type of document we are dealing with.
         try
             jsonfilepath = fullfile(nidmPackList{i}, 'nidm.jsonld');
+            bugFix(jsonfilepath);
             jsondoc=spm_jsonread(jsonfilepath);
             jsonLD = true;
         catch
@@ -175,4 +176,27 @@ function result = searchforID(ID, graph, ids)
         result = '';
     end
     
+end
+
+%--------------------------------------------------------------------------
+%This function is temporary and only here due to a bug in the current SPM
+%export leading to additional ':' characters appearing in the jsonld. The
+%function and all references to it should be removed during the next spm
+%update.
+%--------------------------------------------------------------------------
+function bugFix(jsonPath)
+    %Open the file and read in the text.
+    fileID = fopen(jsonPath, 'r+');
+    text = fscanf(fileID, '%c', inf);
+    
+    %Remove the colons.
+    text = strrep(text, ':"', '"');
+    text = strrep(text, '\n', '\\n');
+    text = strrep(text, '\"', '\\"');
+    fclose(fileID);
+    
+    %Print out.
+    fileID = fopen(jsonPath, 'wt');
+    fprintf(fileID, text);
+    fclose(fileID);
 end

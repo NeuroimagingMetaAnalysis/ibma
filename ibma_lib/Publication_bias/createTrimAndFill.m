@@ -33,7 +33,7 @@ function dataStruct = createTrimAndFill(masking, CElist, CSElist, outdir)
     spm_progress_bar('Set', 4);
     
     %Apply thresholding.
-    [threshVec, lengthUseful] = obtainMaskVoxels(masking, conDataStructure);
+    [threshVec, lengthUseful] = obtainMaskVoxels(masking, conDataStructure, originalVol, outdir);
     conDataStructure = conDataStructure(threshVec==1, :);
     weights = weights(threshVec==1, :);
     
