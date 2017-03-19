@@ -41,13 +41,12 @@ or galbraith).
 
 To run the NIDM-Results viewer do the following:
 
- ```
+
 1. Add the filepath to SPM in Matlab;
 
  ```
  addpath(<full path to SPM>)
  ```
- 
  
 ##### Footnotes for future usage
 
