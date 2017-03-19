@@ -19,12 +19,13 @@ function dataStruct = createBeggsCorrelation(masking, CElist, CSElist, outdir)
     conDataStructure = dataStruct{1};
     conSEDataStructure = dataStruct{2};
     originalVol = dataStruct{3};
+    dim = originalVol.dim;
     
     spm_progress_bar('Init',10,'Begg''s Correlation Map','Current stage');
     
     %We reshape it for efficiency reasons.
-    conDataStructure = reshape(conDataStructure, [91*109*91, length(CElist)]);
-    conSEDataStructure = reshape(conSEDataStructure, [91*109*91, length(CElist)]);
+    conDataStructure = reshape(conDataStructure, [dim(1)*dim(2)*dim(3), length(CElist)]);
+    conSEDataStructure = reshape(conSEDataStructure, [dim(1)*dim(2)*dim(3), length(CElist)]);
     
     %Apply thresholding.
     [threshVec, lengthUseful] = obtainMaskVoxels(masking, conDataStructure, originalVol, outdir);
@@ -76,23 +77,23 @@ function dataStruct = createBeggsCorrelation(masking, CElist, CSElist, outdir)
     
     %Create the t final map with a background of NaN values.
     voxelValues_t = (sumCon - sumDis)./(sumCon + sumDis);
-    finalMap_t = repmat(nan, 91*109*91, 1);
+    finalMap_t = repmat(nan, dim(1)*dim(2)*dim(3), 1);
     finalMap_t(threshVec==1) = voxelValues_t; 
-    finalMap_t = reshape(finalMap_t, [91, 109, 91]);
+    finalMap_t = reshape(finalMap_t, [dim(1), dim(2), dim(3)]);
     
     %Create the z final map with a background of NaN values.
     voxelValues_z  = (sumCon - sumDis)./sqrt(lengthUseful.*...
                    (lengthUseful-1).*(2*lengthUseful+5).*...
                    (1/18));
-    finalMap_z = repmat(nan, 91*109*91, 1);
+    finalMap_z = repmat(nan, dim(1)*dim(2)*dim(3), 1);
     finalMap_z(threshVec==1) = voxelValues_z; 
-    finalMap_z = reshape(finalMap_z, [91, 109, 91]);
+    finalMap_z = reshape(finalMap_z, [dim(1), dim(2), dim(3)]);
     
     %Create the p final map with a background of NaN values.
     voxelValues_p = -log10(2*(1-normcdf(abs(voxelValues_z))));
-    finalMap_p = repmat(nan, 91*109*91, 1);
+    finalMap_p = repmat(nan, dim(1)*dim(2)*dim(3), 1);
     finalMap_p(threshVec==1) = voxelValues_p; 
-    finalMap_p = reshape(finalMap_p, [91, 109, 91]);
+    finalMap_p = reshape(finalMap_p, [dim(1), dim(2), dim(3)]);
     
     spm_progress_bar('Set',10);
     

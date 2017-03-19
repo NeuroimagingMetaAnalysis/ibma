@@ -1,11 +1,11 @@
 %==========================================================================
-%Runs the bias diagnosis tool.
+%Runs the publication bias diagnosis tool.
 %
-%job - the matlab job specified by ibma_config_biasdiag_tool
+%job - the matlab job specified by ibma_config_pubbiasdiag_tool
 %
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
-function ibma_run_biasdiag_tool(job)
+function ibma_run_pubbiasdiag_tool(job)
     
     %Work out what type of map we are creating.
     if isfield(job.statType, 'statType_trimAndFill')
@@ -99,11 +99,11 @@ function ibma_run_biasdiag_tool(job)
     masking = job.masking;
     
     if strcmp(statType, 'MacaskillRegression')
-        ibma_biasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator, 0, sampleSizes);
+        ibma_pubbiasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator, 0, sampleSizes);
     elseif strcmp(statType, 'EggerRegression')
-        ibma_biasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator, weighting);
+        ibma_pubbiasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator, weighting);
     else 
-        ibma_biasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator);
+        ibma_pubbiasdiag_tool(masking, ConE, ConSE, dir{1}, statType, estimator);
     end
     
 end

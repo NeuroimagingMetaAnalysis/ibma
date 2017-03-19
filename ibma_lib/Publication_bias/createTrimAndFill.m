@@ -18,12 +18,13 @@ function dataStruct = createTrimAndFill(masking, CElist, CSElist, outdir)
     conDataStructure = dataStruct{1};
     conSEDataStructure = dataStruct{2};
     originalVol = dataStruct{3};
+    dim = originalVol.dim;
     
     spm_progress_bar('Init',10,'Trim And Fill Map','Current stage');
     
     %Reshape the matrices to obtain a list of voxels.
-    conDataStructure = reshape(conDataStructure, [91*109*91, length(CElist)]);
-    conSEDataStructure = reshape(conSEDataStructure, [91*109*91, length(CElist)]);
+    conDataStructure = reshape(conDataStructure, [dim(1)*dim(2)*dim(3), length(CElist)]);
+    conSEDataStructure = reshape(conSEDataStructure, [dim(1)*dim(2)*dim(3), length(CElist)]);
     
     spm_progress_bar('Set',2);
     
@@ -76,22 +77,22 @@ function dataStruct = createTrimAndFill(masking, CElist, CSElist, outdir)
     spm_progress_bar('Set', 9);
     
     %Add in the NaN background.
-    nanBackground = repmat(nan, 91*109*91, 1);
+    nanBackground = repmat(nan, dim(1)*dim(2)*dim(3), 1);
     nanBackground(threshVec==1) = full(finalMap_R)';
     finalMap_R = nanBackground;
     
-    nanBackground = repmat(nan, 91*109*91, 1);
+    nanBackground = repmat(nan, dim(1)*dim(2)*dim(3), 1);
     nanBackground(threshVec==1) = full(finalMap_L)';
     finalMap_L = nanBackground;
     
-    nanBackground = repmat(nan, 91*109*91, 1);
+    nanBackground = repmat(nan, dim(1)*dim(2)*dim(3), 1);
     nanBackground(threshVec==1) = full(finalMap_Q)';
     finalMap_Q = nanBackground;
     
     %Reshape into original format.
-    finalMap_R = reshape(finalMap_R, [91, 109, 91]);
-    finalMap_L = reshape(finalMap_L, [91, 109, 91]);
-    finalMap_Q = reshape(finalMap_Q, [91, 109, 91]);
+    finalMap_R = reshape(finalMap_R, [dim(1), dim(2), dim(3)]);
+    finalMap_L = reshape(finalMap_L, [dim(1), dim(2), dim(3)]);
+    finalMap_Q = reshape(finalMap_Q, [dim(1), dim(2), dim(3)]);
     
     spm_progress_bar('Set', 10);
     

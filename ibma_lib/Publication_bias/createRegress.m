@@ -24,16 +24,17 @@ function dataStruct = createRegress(masking, CElist, CSElist, outdir, type, samp
     conDataStructure = dataStruct{1};
     conSEDataStructure = dataStruct{2};
     originalVol = dataStruct{3};
+    dim = originalVol.dim;
     
     %Reshape the matrices.
-    conDataStructure = reshape(conDataStructure, [91*109*91, length(CElist)]);
-    conSEDataStructure = reshape(conSEDataStructure, [91*109*91, length(CElist)]);
+    conDataStructure = reshape(conDataStructure, [dim(1)*dim(2)*dim(3), length(CElist)]);
+    conSEDataStructure = reshape(conSEDataStructure, [dim(1)*dim(2)*dim(3), length(CElist)]);
     
     %Calculate the precision values.
     if ~strcmp(type, 'm')
         precisionValues = 1./conSEDataStructure;
     else
-        precisionValues = repmat(sampleSizes', 91*109*91, 1);
+        precisionValues = repmat(sampleSizes', dim(1)*dim(2)*dim(3), 1);
     end
     
     %Calculate the effect size.
@@ -170,8 +171,8 @@ function dataStruct = createRegress(masking, CElist, CSElist, outdir, type, samp
     outputMatrix_se=outputMatrix_se.*(sqrt(length(CElist)*200-400))./sqrt(max(lengthUseful'-2,0));
     outputMatrix_p = full(-abs(outputMatrix./outputMatrix_se));
     
-    nanBackground = repmat(nan, 91*109*91, 1);
-    nanBackground_p = repmat(nan, 91*109*91, 1);
+    nanBackground = repmat(nan, dim(1)*dim(2)*dim(3), 1);
+    nanBackground_p = repmat(nan, dim(1)*dim(2)*dim(3), 1);
     
     spm_progress_bar('Set',floor(lengthThresh/200)+2);
     
@@ -191,8 +192,8 @@ function dataStruct = createRegress(masking, CElist, CSElist, outdir, type, samp
         nanBackground_p(threshVec==1) = outputMatrix_p';
     end
     
-    finalMap = reshape(nanBackground, [91, 109, 91]);
-    finalMap_p = reshape(nanBackground_p, [91, 109, 91]);
+    finalMap = reshape(nanBackground, [dim(1), dim(2), dim(3)]);
+    finalMap_p = reshape(nanBackground_p, [dim(1), dim(2), dim(3)]);
     
     newVol       = rmfield(originalVol, {'n', 'descrip', 'private'});
     newVol_p       = rmfield(originalVol, {'n', 'descrip', 'private'});

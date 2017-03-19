@@ -17,7 +17,11 @@ function hetImageDisplay(src, event, dir, mapName, dataStruct)
     %Add the map switch options to the toolbar.
     ToolsMenu = findall(gcf, 'tag', 'figMenuTools');
     mapSwitch = uimenu('Label','Switch Map', 'Parent',ToolsMenu,'Separator','on');
-
+    
+    if ~contains(mapName, 'studyNumberMap')
+        uimenu('Label','Study Number Map', 'Parent', mapSwitch, 'Callback',{@hetImageDisplay, dir, 'studyNumberMap.nii', dataStruct});
+    end
+    
     if ~contains(mapName, 'Q')
         uimenu('Label','Q Map', 'Parent', mapSwitch, 'Callback',{@hetImageDisplay, dir, 'QHeterogeneityMap.nii', dataStruct});
     end

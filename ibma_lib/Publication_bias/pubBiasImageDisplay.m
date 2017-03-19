@@ -1,15 +1,18 @@
 %==========================================================================
-%Display an image and add menu options. This function takes in 5 inputs.
+%Display an image and add menu options. This function takes in 5 or 6 
+%inputs.
 %
 %src, event - these are needed for event handling for the SPM gui.
 %dir - the directory of the map.
 %mapName - the name of the map to display. 
 %dataStruct - the data read in.
+%prevMapName - the name of the previous map (needed for study number
+%              display)
 %
 %Authors: Thomas Maullin
 %==========================================================================
 
-function pubBiasImageDisplay(src, event, dir, mapName, dataStruct)
+function pubBiasImageDisplay(src, event, dir, mapName, dataStruct, prevMapName)
 
     %Remove previous menu options and display the image.
     delete(spm_figure('FindWin','Graphics'));
@@ -19,29 +22,48 @@ function pubBiasImageDisplay(src, event, dir, mapName, dataStruct)
     ToolsMenu = findall(gcf, 'tag', 'figMenuTools');
     mapSwitch = uimenu('Label','Switch Map', 'Parent',ToolsMenu,'Separator','on');
     
+    if ~contains(mapName, 'studyNumberMap')
+        uimenu('Label','Study Number Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'studyNumberMap.nii', dataStruct, mapName});
+    else
+        if contains(prevMapName, 'eu') && contains(prevMapName, 'Regression')
+            mapName = 'euRegression';
+        elseif contains(prevMapName, 'ew') && contains(prevMapName, 'Regression')
+            mapName = 'ewRegression';
+        elseif contains(prevMapName, 'm') && contains(prevMapName, 'Regression')
+            mapName = 'mRegression';
+        elseif contains(prevMapName, 'TrimAndFill')
+            mapName = 'TrimAndFill';
+        else
+            mapName = 'BeggsCorrelation';
+        end
+    end
+    
     if contains(mapName, 'eu') && contains(mapName, 'Regression')
         %If we're looking at egger unweighted regression we need options
         %for either intercept p-values or just p-values.
-        if contains(mapName, 'pi')
-            uimenu('Label','Intercept Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'euiRegressionMap.nii', dataStruct});
-        else
+        if ~contains(mapName, 'pi')
             uimenu('Label','P-Value Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'eupiRegressionMap.nii', dataStruct});
+        end
+        if ~contains(mapName, 'iR') || contains(mapName, 'pi')
+            uimenu('Label','Intercept Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'euiRegressionMap.nii', dataStruct});
         end
     elseif contains(mapName, 'ew') && contains(mapName, 'Regression')
         %If we're looking at egger weighted regression we need options
         %for either intercept p-values or just intercept values.
-        if contains(mapName, 'pi')
-            uimenu('Label','Intercept Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'ewiRegressionMap.nii', dataStruct});
-        else
+        if ~contains(mapName, 'pi')
             uimenu('Label','P-Value Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'ewpiRegressionMap.nii', dataStruct});
+        end
+        if ~contains(mapName, 'iR') || contains(mapName, 'pi')
+            uimenu('Label','Intercept Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'ewiRegressionMap.nii', dataStruct});
         end
     elseif contains(mapName, 'm') && contains(mapName, 'Regression')
         %If we're looking macaskill regression we need options for either
         %slope p-values or just slope values.
-        if contains(mapName, 'ps')
-            uimenu('Label','Intercept Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'msRegressionMap.nii', dataStruct});
-        else
+        if ~contains(mapName, 'ps')
             uimenu('Label','P-Value Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'mpsRegressionMap.nii', dataStruct});
+        end
+        if ~contains(mapName, 'sR') || contains(mapName, 'ps')
+            uimenu('Label','Slope Map', 'Parent', mapSwitch, 'Callback',{@pubBiasImageDisplay, dir, 'msRegressionMap.nii', dataStruct});
         end
     elseif contains(mapName, 'TrimAndFill')
         %If we're looking Trim And Fill we need options for the estimators

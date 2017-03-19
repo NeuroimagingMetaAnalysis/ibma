@@ -12,7 +12,7 @@
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
 
-function ibma_biasdiag_tool(masking, ConE, ConSE, dir, statType, estimator, weighting, sampleSizes)
+function ibma_pubbiasdiag_tool(masking, ConE, ConSE, dir, statType, estimator, weighting, sampleSizes)
     
     
     addpath(fullfile(fileparts(mfilename('fullpath')), 'ibma_lib', 'Preprocessing'));

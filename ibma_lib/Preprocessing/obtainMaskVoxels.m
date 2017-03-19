@@ -14,6 +14,7 @@ function [threshVec, lengthUseful] = obtainMaskVoxels(masking, voxelList, origin
     %Calculate the number of studies and number of voxels.
     studyNumber = size(voxelList, 2);
     voxelNumber = size(voxelList, 1);
+    dim = originalVol.dim;
     
     %Calculate which entries are useful.
     usefulEntries = ~isnan(voxelList);
@@ -60,7 +61,7 @@ function [threshVec, lengthUseful] = obtainMaskVoxels(masking, voxelList, origin
         %Read it in.
         maskVol = spm_vol(maskPath);
         mask = spm_read_vols(maskVol);
-        mask = reshape(mask, [91*109*91, 1]);
+        mask = reshape(mask, [dim(1)*dim(2)*dim(3), 1]);
 
         %Threshold
         threshVec(mask<1) = 0;
@@ -71,7 +72,7 @@ function [threshVec, lengthUseful] = obtainMaskVoxels(masking, voxelList, origin
     %are present at each voxel.
     %----------------------------------------------------------------------
     
-    lengthUsefulMap = reshape(lengthUseful, [91, 109, 91]);
+    lengthUsefulMap = reshape(lengthUseful, [dim(1), dim(2), dim(3)]);
     
     %Create the new volume.
     newVol       = rmfield(originalVol, {'n', 'descrip', 'private'});

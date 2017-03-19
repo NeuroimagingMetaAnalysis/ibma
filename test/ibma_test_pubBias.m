@@ -1,6 +1,6 @@
 %==========================================================================
-%Unit tests for testing features of the viewer. To run the below run the 
-%runTest function.
+%Unit tests for testing features of the publication bias options in the 
+%ibma toolbox. To run the below run the runTest_pubBias function.
 %
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
@@ -11,6 +11,11 @@ classdef ibma_test_pubBias < matlab.unittest.TestCase
         %Function for deleting any previous nii files.
         function deleteNII(testCase, data_path, type)
             close all;
+            %Delete the study number map.
+            index = fullfile(data_path, 'studyNumberMap.nii');
+            if exist(index, 'file')
+                delete(index);
+            end
             %If it's an egger weighted test, deleted any weighted egger
             %files.
             if strcmp(type, 'EWRegression')
@@ -112,6 +117,7 @@ classdef ibma_test_pubBias < matlab.unittest.TestCase
             deleteNII(testCase, data_output_path, 'TrimAndFill');
         end
         
+        %Checking Trim And Fill L runs.
         function trimAndFill_L(testCase)
             data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
             data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
@@ -143,6 +149,7 @@ classdef ibma_test_pubBias < matlab.unittest.TestCase
             deleteNII(testCase, data_output_path, 'TrimAndFill');
         end
         
+        %Checking Trim And Fill R runs.
         function trimAndFill_R(testCase)
             data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
             data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
@@ -174,6 +181,7 @@ classdef ibma_test_pubBias < matlab.unittest.TestCase
             deleteNII(testCase, data_output_path, 'TrimAndFill');
         end
         
+        %Checking Beggs correlation z runs.
         function BeggsCorrelation_z(testCase)
             data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
             data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
@@ -205,6 +213,7 @@ classdef ibma_test_pubBias < matlab.unittest.TestCase
             deleteNII(testCase, data_output_path, 'BeggsCorrelation');
         end
         
+        %Checking Beggs correlation p runs.
         function BeggsCorrelation_p(testCase)
             data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
             data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
@@ -236,6 +245,7 @@ classdef ibma_test_pubBias < matlab.unittest.TestCase
             deleteNII(testCase, data_output_path, 'BeggsCorrelation');
         end
         
+        %Checking Beggs correlation t runs.
         function BeggsCorrelation_t(testCase)
             data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
             data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
@@ -267,5 +277,625 @@ classdef ibma_test_pubBias < matlab.unittest.TestCase
             deleteNII(testCase, data_output_path, 'BeggsCorrelation');
         end
         
+        %Checking Egger Unweighted p values run.
+        function eggerUnweighted_p(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_pVal.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_pVal.dataEntry.dataEntry_files.ConE = {...
+                                  [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_pVal.dataEntry.dataEntry_files.ConSE = {...
+                                  [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''}; 
+            spm_jobman('run', matlabbatch);
+            deleteNII(testCase, data_output_path, 'EURegression');
+        end
+        
+        %Checking Egger weighted p values run.
+        function eggerweighted_p(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_pVal.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_pVal.dataEntry.dataEntry_files.ConE = {...
+                                  [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_pVal.dataEntry.dataEntry_files.ConSE = {...
+                                  [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''}; 
+            spm_jobman('run', matlabbatch);
+            deleteNII(testCase, data_output_path, 'EWRegression');
+        end
+        
+        %Checking Egger unweighted intercepts run.
+        function eggerunweighted_i(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_intercepts.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_intercepts.dataEntry.dataEntry_files.ConE = {...
+                                  [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_intercepts.dataEntry.dataEntry_files.ConSE = {...
+                                  [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''}; 
+            spm_jobman('run', matlabbatch);
+            deleteNII(testCase, data_output_path, 'EWRegression');
+        end
+        
+        %Checking Egger weighted intercepts run.
+        function eggerweighted_i(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_intercepts.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_intercepts.dataEntry.dataEntry_files.ConE = {...
+                                  [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_intercepts.dataEntry.dataEntry_files.ConSE = {...
+                                  [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                                  [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch); 
+            deleteNII(testCase, data_output_path, 'EWRegression');
+        end
+        
+        %Checking Macaskill P-values run.
+        function macaskill_p(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_pVal.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_pVal.dataEntry.dataEntry_files.ConE = {...
+                                              [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_pVal.dataEntry.dataEntry_files.ConSE = {
+                                              [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_pVal.dataEntry.dataEntry_files.nsubjects = [25
+                                                                                                                                                                  25
+                                                                                                                                                                  20
+                                                                                                                                                                  20
+                                                                                                                                                                  9
+                                                                                                                                                                  9
+                                                                                                                                                                  9
+                                                                                                                                                                  12
+                                                                                                                                                                  12];
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch); 
+            deleteNII(testCase, data_output_path, 'MRegression');
+        end
+        
+        %Checking Macaskill slopes run.
+        function macaskill_s(testCase)    
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_slope.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_slope.dataEntry.dataEntry_files.ConE = {...
+                                              [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_slope.dataEntry.dataEntry_files.ConSE = {
+                                              [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                                              [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_slope.dataEntry.dataEntry_files.nsubjects = [25
+                                                                  25
+                                                                  20
+                                                                  20
+                                                                  9
+                                                                  9
+                                                                  9
+                                                                  12
+                                                                  12];
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch); 
+            deleteNII(testCase, data_output_path, 'MRegression');
+        end
+        
+        %Function checking one of the trim and fill methods work with NIDM
+        %input.
+        function trimAndFill_nidmInput(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data', 'NIDM-Packs');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_nidm.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_nidm.dataEntry_nidmPacks = {...
+                          fullfile(data_input_path, 'pain_01.nidm.zip')
+                          fullfile(data_input_path, 'pain_02.nidm.zip')
+                          fullfile(data_input_path, 'pain_03.nidm.zip')
+                          fullfile(data_input_path, 'pain_04.nidm.zip')
+                          fullfile(data_input_path, 'pain_05.nidm.zip')
+                          fullfile(data_input_path, 'pain_06.nidm.zip')
+                          fullfile(data_input_path, 'pain_07.nidm.zip')
+                          fullfile(data_input_path, 'pain_08.nidm.zip')
+                          fullfile(data_input_path, 'pain_09.nidm.zip')
+                          fullfile(data_input_path, 'pain_10.nidm.zip')
+                          fullfile(data_input_path, 'pain_11.nidm.zip')
+                          fullfile(data_input_path, 'pain_12.nidm.zip')
+                          fullfile(data_input_path, 'pain_13.nidm.zip')
+                          fullfile(data_input_path, 'pain_14.nidm.zip')
+                          fullfile(data_input_path, 'pain_15.nidm.zip')
+                          fullfile(data_input_path, 'pain_16.nidm.zip')
+                          fullfile(data_input_path, 'pain_17.nidm.zip')
+                          fullfile(data_input_path, 'pain_18.nidm.zip')
+                          fullfile(data_input_path, 'pain_19.nidm.zip')
+                          fullfile(data_input_path, 'pain_20.nidm.zip')
+                          fullfile(data_input_path, 'pain_21.nidm.zip')
+                          };
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_nidm.dataEntry_exNums = [1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1
+                                                                     1];
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch); 
+            deleteNII(testCase, data_output_path, 'TrimAndFill');
+        end
+        
+        %Function checking one of the macaskillRegressio methods work with NIDM
+        %input.
+        function macaskillRegression_nidmInput(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data', 'NIDM-Packs');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_pVal.dataEntry.dataEntry_nidm.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_pVal.dataEntry.dataEntry_nidm.dataEntry_nidmPacks = {...
+                              fullfile(data_input_path, 'pain_01.nidm.zip')
+                              fullfile(data_input_path, 'pain_02.nidm.zip')
+                              fullfile(data_input_path, 'pain_03.nidm.zip')
+                              fullfile(data_input_path, 'pain_04.nidm.zip')
+                              fullfile(data_input_path, 'pain_05.nidm.zip')
+                              fullfile(data_input_path, 'pain_06.nidm.zip')
+                              fullfile(data_input_path, 'pain_07.nidm.zip')
+                              fullfile(data_input_path, 'pain_08.nidm.zip')
+                              fullfile(data_input_path, 'pain_09.nidm.zip')
+                              fullfile(data_input_path, 'pain_10.nidm.zip')
+                              fullfile(data_input_path, 'pain_11.nidm.zip')
+                              fullfile(data_input_path, 'pain_12.nidm.zip')
+                              fullfile(data_input_path, 'pain_13.nidm.zip')
+                              fullfile(data_input_path, 'pain_14.nidm.zip')
+                              fullfile(data_input_path, 'pain_15.nidm.zip')
+                              fullfile(data_input_path, 'pain_16.nidm.zip')
+                              fullfile(data_input_path, 'pain_17.nidm.zip')
+                              fullfile(data_input_path, 'pain_18.nidm.zip')
+                              fullfile(data_input_path, 'pain_19.nidm.zip')
+                              fullfile(data_input_path, 'pain_20.nidm.zip')
+                              fullfile(data_input_path, 'pain_21.nidm.zip')
+                              };
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_MacaskillRegression.statType_MacaskillRegression_pVal.dataEntry.dataEntry_nidm.dataEntry_exNums = [1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1
+                                                                        1];
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch); 
+            deleteNII(testCase, data_output_path, 'MRegression');
+        end
+        
+        %Function checking one of the Egger Weighted methods work with NIDM
+        %input.
+        function eggerweighted_nidmInput(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data', 'NIDM-Packs');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_pVal.dataEntry.dataEntry_nidm.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_pVal.dataEntry.dataEntry_nidm.dataEntry_nidmPacks = {...
+                              fullfile(data_input_path, 'pain_01.nidm.zip')
+                              fullfile(data_input_path, 'pain_02.nidm.zip')
+                              fullfile(data_input_path, 'pain_03.nidm.zip')
+                              fullfile(data_input_path, 'pain_04.nidm.zip')
+                              fullfile(data_input_path, 'pain_05.nidm.zip')
+                              fullfile(data_input_path, 'pain_06.nidm.zip')
+                              fullfile(data_input_path, 'pain_07.nidm.zip')
+                              fullfile(data_input_path, 'pain_08.nidm.zip')
+                              fullfile(data_input_path, 'pain_09.nidm.zip')
+                              fullfile(data_input_path, 'pain_10.nidm.zip')
+                              fullfile(data_input_path, 'pain_11.nidm.zip')
+                              fullfile(data_input_path, 'pain_12.nidm.zip')
+                              fullfile(data_input_path, 'pain_13.nidm.zip')
+                              fullfile(data_input_path, 'pain_14.nidm.zip')
+                              fullfile(data_input_path, 'pain_15.nidm.zip')
+                              fullfile(data_input_path, 'pain_16.nidm.zip')
+                              fullfile(data_input_path, 'pain_17.nidm.zip')
+                              fullfile(data_input_path, 'pain_18.nidm.zip')
+                              fullfile(data_input_path, 'pain_19.nidm.zip')
+                              fullfile(data_input_path, 'pain_20.nidm.zip')
+                              fullfile(data_input_path, 'pain_21.nidm.zip')
+                              };
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_weighted.statType_EggerRegression_weighted_pVal.dataEntry.dataEntry_nidm.dataEntry_exNums = [1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1];
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            spm_jobman('run', matlabbatch); 
+            deleteNII(testCase, data_output_path, 'EWRegression');
+        end
+        
+        %Function checking one of the Egger unweighted methods work with NIDM
+        %input.
+        function eggerunweighted_nidmInput(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data', 'NIDM-Packs');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_pVal.dataEntry.dataEntry_nidm.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_pVal.dataEntry.dataEntry_nidm.dataEntry_nidmPacks = {...
+                              fullfile(data_input_path, 'pain_01.nidm.zip')
+                              fullfile(data_input_path, 'pain_02.nidm.zip')
+                              fullfile(data_input_path, 'pain_03.nidm.zip')
+                              fullfile(data_input_path, 'pain_04.nidm.zip')
+                              fullfile(data_input_path, 'pain_05.nidm.zip')
+                              fullfile(data_input_path, 'pain_06.nidm.zip')
+                              fullfile(data_input_path, 'pain_07.nidm.zip')
+                              fullfile(data_input_path, 'pain_08.nidm.zip')
+                              fullfile(data_input_path, 'pain_09.nidm.zip')
+                              fullfile(data_input_path, 'pain_10.nidm.zip')
+                              fullfile(data_input_path, 'pain_11.nidm.zip')
+                              fullfile(data_input_path, 'pain_12.nidm.zip')
+                              fullfile(data_input_path, 'pain_13.nidm.zip')
+                              fullfile(data_input_path, 'pain_14.nidm.zip')
+                              fullfile(data_input_path, 'pain_15.nidm.zip')
+                              fullfile(data_input_path, 'pain_16.nidm.zip')
+                              fullfile(data_input_path, 'pain_17.nidm.zip')
+                              fullfile(data_input_path, 'pain_18.nidm.zip')
+                              fullfile(data_input_path, 'pain_19.nidm.zip')
+                              fullfile(data_input_path, 'pain_20.nidm.zip')
+                              fullfile(data_input_path, 'pain_21.nidm.zip')
+                              };
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_EggerRegression.statType_EggerRegression_unweighted.statType_EggerRegression_unweighted_pVal.dataEntry.dataEntry_nidm.dataEntry_exNums = [1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1];
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            spm_jobman('run', matlabbatch); 
+            deleteNII(testCase, data_output_path, 'EURegression');
+        end
+        
+        %Function checking one of the beggs correlation methods work with 
+        %NIDM input.
+        function beggsCorrelation_nidmInput(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data', 'NIDM-Packs');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_BeggsCorrelation.statType_BeggsCorrelation_p.dataEntry.dataEntry_nidm.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_BeggsCorrelation.statType_BeggsCorrelation_p.dataEntry.dataEntry_nidm.dataEntry_nidmPacks = {...
+                              fullfile(data_input_path, 'pain_01.nidm.zip')
+                              fullfile(data_input_path, 'pain_02.nidm.zip')
+                              fullfile(data_input_path, 'pain_03.nidm.zip')
+                              fullfile(data_input_path, 'pain_04.nidm.zip')
+                              fullfile(data_input_path, 'pain_05.nidm.zip')
+                              fullfile(data_input_path, 'pain_06.nidm.zip')
+                              fullfile(data_input_path, 'pain_07.nidm.zip')
+                              fullfile(data_input_path, 'pain_08.nidm.zip')
+                              fullfile(data_input_path, 'pain_09.nidm.zip')
+                              fullfile(data_input_path, 'pain_10.nidm.zip')
+                              fullfile(data_input_path, 'pain_11.nidm.zip')
+                              fullfile(data_input_path, 'pain_12.nidm.zip')
+                              fullfile(data_input_path, 'pain_13.nidm.zip')
+                              fullfile(data_input_path, 'pain_14.nidm.zip')
+                              fullfile(data_input_path, 'pain_15.nidm.zip')
+                              fullfile(data_input_path, 'pain_16.nidm.zip')
+                              fullfile(data_input_path, 'pain_17.nidm.zip')
+                              fullfile(data_input_path, 'pain_18.nidm.zip')
+                              fullfile(data_input_path, 'pain_19.nidm.zip')
+                              fullfile(data_input_path, 'pain_20.nidm.zip')
+                              fullfile(data_input_path, 'pain_21.nidm.zip')
+                              };
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_BeggsCorrelation.statType_BeggsCorrelation_p.dataEntry.dataEntry_nidm.dataEntry_exNums = [1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1
+                                                                       1];
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch); 
+            deleteNII(testCase, data_output_path, 'BeggsCorrelation');
+        end
+        
+        %Check a job with percentage masking works.
+        function mask_percentage(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.ConE = {...
+                      [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.ConSE = {...
+                      [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tmp.pthresh = 70;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch);
+            deleteNII(testCase, data_output_path, 'TrimAndFill');
+        end
+        
+        %Check a job with relative masking works.
+        function mask_relative(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.ConE = {...
+                      [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.ConSE = {...
+                      [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tmr.rthresh = 5;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch);
+            deleteNII(testCase, data_output_path, 'TrimAndFill');
+        end
+        
+        %Check a job with no implicit mask works.
+        function mask_noImp(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.ConE = {...
+                      [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.ConSE = {...
+                      [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 0;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {''};
+            spm_jobman('run', matlabbatch);
+            deleteNII(testCase, data_output_path, 'TrimAndFill');
+        end
+        
+        %Check a job with an explicit mask works.
+        function mask_exp(testCase)
+            data_output_path = fullfile(fileparts(mfilename('fullpath')), '..');
+            data_input_path = fullfile(fileparts(mfilename('fullpath')), '..', 'ibma_data');
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.dir = {data_output_path};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.ConE = {...
+                      [fullfile(data_input_path, 'pain_01','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_02','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_03','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_04','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_05','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_06','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_07','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_08','Contrast.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_09','Contrast.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.statType.statType_trimAndFill.statType_trimAndFill_L.dataEntry.dataEntry_files.ConSE = {...
+                      [fullfile(data_input_path, 'pain_01','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_02','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_03','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_04','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_05','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_06','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_07','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_08','ContrastStandardError.nii'),',1'];...
+                      [fullfile(data_input_path, 'pain_09','ContrastStandardError.nii'),',1']};
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.tm.tm_none = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.im = 1;
+            matlabbatch{1}.spm.tools.ibma.diagbias.masking.em = {[fullfile(data_input_path, 'temp.nii'),',1']};
+            websave([data_input_path filesep 'temp.nii.gz'], 'http://neurovault.org/media/images/1290/TPJ_Mask.nii.gz');
+            gunzip([data_input_path filesep 'temp.nii.gz'], data_input_path);
+            spm_jobman('run', matlabbatch);
+            deleteNII(testCase, data_output_path, 'TrimAndFill');
+        end
     end
 end

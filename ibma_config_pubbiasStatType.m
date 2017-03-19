@@ -1,4 +1,4 @@
-function statType = ibma_config_biasStatType()
+function statType = ibma_config_pubbiasStatType()
  % IBMA_CONFIG_FFXRFX  Define the matlabbatch job structure for selection 
  % of Ramdon-effects (RFX) or Fixed-effects (FFX) procedure.
  %   ffxrfx = IBMA_CONFIG_FFXRFX() return the matlabbatch configuration to 

@@ -1,9 +1,9 @@
 %==========================================================================
-%Configures the job layout for the bias diagnosis tool.
+%Configures the job layout for the publication bias diagnosis tool.
 %
 %Authors: Thomas Maullin, Camille Maumet.
 %==========================================================================
-function diagbiasconfig = ibma_config_biasdiag_tool()
+function diagbiasconfig = ibma_config_pubbiasdiag_tool()
     
 %--------------------------------------------------------------------------
 % Masking
@@ -15,7 +15,7 @@ function diagbiasconfig = ibma_config_biasdiag_tool()
 % StatType
 %--------------------------------------------------------------------------
 
-    statType = ibma_config_biasStatType();
+    statType = ibma_config_pubbiasStatType();
   
 
 %--------------------------------------------------------------------------
@@ -27,11 +27,11 @@ function diagbiasconfig = ibma_config_biasdiag_tool()
     diagbiasconfig.name    = 'Diagnose Publication Bias';
     diagbiasconfig.val     = {statType masking};
     diagbiasconfig.help    = {'Display bias statistic map for further diagnosis.'};
-    diagbiasconfig.prog = @ibma_run_biasdiag_tool;
-    diagbiasconfig.check = @ibma_check_biasdiag_tool;
+    diagbiasconfig.prog = @ibma_run_pubbiasdiag_tool;
+    diagbiasconfig.check = @ibma_check_pubbiasdiag_tool;
     
 end
 
-function t = ibma_check_biasdiag_tool(job)
+function t = ibma_check_pubbiasdiag_tool(job)
     t={};
 end
