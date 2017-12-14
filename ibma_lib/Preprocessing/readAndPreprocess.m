@@ -38,7 +38,8 @@ function dataStruct = readAndPreprocess(CElist, CSElist, masking)
         img2     = spm_read_vols(originalSEVol);
         
         %This is to correct for FSL target intensity.
-        if(mean(img(img>0))>1000)
+        imgMean = mean(abs(img(img ~= 0 & ~isnan(img))))
+        if(imgMean>10)
             img = img./100;
             img2 = img2./100;
         end
