@@ -47,7 +47,7 @@ function dataStruct = createHetMeasure(masking, CElist, CSElist, outdir)
     %Now we work out the values we are interested in.
     voxelValues_Q = nansum(weights.*((thetahat-effectSize).^2),2);
     voxelValues_I2 = max((voxelValues_Q-lengthUseful+1)./voxelValues_Q,0);
-    voxelValues_P = -log10(chi2pdf(voxelValues_Q,lengthUseful-1));
+    voxelValues_P = -log10(1-chi2cdf(voxelValues_Q,lengthUseful-1));
     
     spm_progress_bar('Set',4);
     
