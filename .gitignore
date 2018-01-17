@@ -1,1 +1,11 @@
-*.m~
+#Autosaves
+*.asv
+
+#jobs
+*.mat
+
+#nifti's
+*.nii
+
+#Data
+*ibma_heterogeniety_data/*
