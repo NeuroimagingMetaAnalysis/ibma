@@ -1,4 +1,4 @@
-function ibma = tbx_cfg_ibma()
+function ibma = tbx_cfg_IBMA()
 % TBX_CFG_IBMA Start-up function of Image-Based Meta-Analysis (IBMA) 
 % toolbox.
 %   ibma = TBX_CFG_IBMA() Define the matlabbatch job structure for
